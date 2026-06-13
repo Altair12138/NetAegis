@@ -16,6 +16,7 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
+from loguru import logger
 
 from .db import DeviceRunRow, JobRow, session
 
@@ -142,6 +143,7 @@ def _sheet_name_mismatch(wb: Workbook, devices: list[DeviceRunRow]) -> None:
                 data = json.loads(Path(d.json_path).read_text(encoding="utf-8"))
                 actual = data.get("name_check", {}).get("actual", "") or ""
             except Exception:  # noqa: BLE001
+                logger.warning(f"Failed to parse JSON for name mismatch: {d.json_path}")
                 actual = ""
         ws.cell(row=row_i, column=1, value=d.device_name)
         ws.cell(row=row_i, column=2, value=d.mgmt_ip)
@@ -180,6 +182,7 @@ def _load_command_errors(json_path: str | None) -> list[tuple[str, str]]:
     try:
         data = json.loads(Path(json_path).read_text(encoding="utf-8"))
     except Exception:  # noqa: BLE001
+        logger.warning(f"Failed to load command errors from {json_path}")
         return []
     out = []
     for c in data.get("commands", []):

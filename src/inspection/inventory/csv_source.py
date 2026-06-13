@@ -20,10 +20,8 @@ class CSVInventorySource(InventorySource):
         p = Path(path)
         if not p.is_absolute():
             settings = get_settings()
-            base_dir = settings.base_dir
-            if not base_dir.is_absolute():
-                base_dir = Path(__file__).resolve().parents[3] / base_dir
-            p = base_dir / p
+            # P3: 复用 config._PROJECT_ROOT 进行路径解析，避免 parents[3] 硬编码。
+            p = settings.base_dir / p
         self.path = p
         self.errors: list[dict] = []
 

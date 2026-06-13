@@ -1,4 +1,7 @@
-"""API 输入输出 schema（与 models.Job 区分，避免序列化耦合）。"""
+"""API 输入输出 schema（与 models.Job 区分，避免序列化耦合）。
+
+P3-16: 使用 get_settings().default_inventory_path 消除硬编码。
+"""
 
 from __future__ import annotations
 
@@ -7,25 +10,29 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from ..config import get_settings
+
+_DEFAULT_INVENTORY = get_settings().default_inventory_path
+
 
 class CreateJobRequest(BaseModel):
     type: Literal["inspect", "backup"] = "inspect"
     inventory_source: Literal["csv", "cmdb"] = "csv"
-    inventory_path: str | None = "inventory/devices.csv"
+    inventory_path: str | None = Field(default_factory=lambda: _DEFAULT_INVENTORY)
     device_filter: dict | None = None
     concurrency: int = Field(default=20, ge=1, le=200)
     credential_profile: str = "default"
-    command_keys: list[str] | None = None      # 例 ["lldp", "route"]
-    command_tags: list[str] | None = None      # 例 ["routing"], ["topology"]
-    enable_parse: bool = False                 # 是否启用 ntc-templates 解析
-    auto_backup: bool = True                   # 是否自动入库 config
+    command_keys: list[str] | None = None
+    command_tags: list[str] | None = None
+    enable_parse: bool = False
+    auto_backup: bool = True
 
 
 class ScheduleCreate(BaseModel):
     id: str
     trigger_type: Literal["cron", "interval", "date"]
-    trigger_args: dict                          # cron: {hour, minute, day_of_week}; interval: {hours}; date: {run_date}
-    inventory_path: str = "inventory/devices.csv"
+    trigger_args: dict
+    inventory_path: str = Field(default_factory=lambda: _DEFAULT_INVENTORY)
     job_type: Literal["inspect", "backup"] = "inspect"
     concurrency: int = 20
     credential_profile: str = "default"
@@ -36,7 +43,7 @@ class ScheduleCreate(BaseModel):
 
 class InventoryPreviewRequest(BaseModel):
     inventory_source: Literal["csv", "cmdb"] = "csv"
-    inventory_path: str | None = "inventory/devices.csv"
+    inventory_path: str | None = Field(default_factory=lambda: _DEFAULT_INVENTORY)
     device_filter: dict | None = None
 
 

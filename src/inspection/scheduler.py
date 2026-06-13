@@ -49,6 +49,20 @@ def shutdown() -> None:
             _scheduler = None
 
 
+def is_running() -> bool:
+    """检查调度器是否在运行（供 health check 使用）。"""
+    with _lock:
+        return _scheduler is not None and _scheduler.running
+
+
+def job_count() -> int:
+    """返回当前调度的 job 数量。"""
+    with _lock:
+        if _scheduler is None:
+            return 0
+        return len(_scheduler.get_jobs())
+
+
 # ---------------------------------------------------------------------------
 # 任务函数：被 APScheduler 反序列化调用，因此参数必须是基础类型
 # ---------------------------------------------------------------------------
@@ -62,22 +76,28 @@ def _scheduled_inspect(
     command_tags: list[str] | None = None,
     device_filter: dict | None = None,
 ) -> None:
-    devices = list(CSVInventorySource(inventory_path).fetch(**(device_filter or {})))
-    if not devices:
-        logger.warning(f"scheduled job: no devices matched ({inventory_path}, {device_filter})")
-        return
-    run_job(
-        JobCreate(
-            type=JobType(job_type),
-            inventory_path=inventory_path,
-            concurrency=concurrency,
-            credential_profile=credential_profile,
-            command_keys=command_keys,
-            command_tags=command_tags,
-            device_filter=device_filter,
-        ),
-        devices,
-    )
+    """P2-11: 在后台线程中执行，避免阻塞 APScheduler worker。"""
+    import threading
+
+    def _run():
+        devices = list(CSVInventorySource(inventory_path).fetch(**(device_filter or {})))
+        if not devices:
+            logger.warning(f"scheduled job: no devices matched ({inventory_path}, {device_filter})")
+            return
+        run_job(
+            JobCreate(
+                type=JobType(job_type),
+                inventory_path=inventory_path,
+                concurrency=concurrency,
+                credential_profile=credential_profile,
+                command_keys=command_keys,
+                command_tags=command_tags,
+                device_filter=device_filter,
+            ),
+            devices,
+        )
+
+    threading.Thread(target=_run, daemon=True).start()
 
 
 # ---------------------------------------------------------------------------

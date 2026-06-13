@@ -13,17 +13,17 @@ P0 改进:
   - as_completed 循环调用 f.result() 避免静默吞异常。
   - _platform_for() 返回友好错误信息。
   - _update_device / _finalize_job 缺失行时记录 warning。
-  - 将 legacy_kex 通过 connection extras 按连接传递，避免全局副作用。
 
 P2 改进:
-  - 每设备单独构建单 host Nornir 实例，消除 O(N²) filter 开销。
+  - 每设备单独构建单 host Nornir 实例，消除 O(N^2) filter 开销。
+  - _write_summary 用 SQL GROUP BY 聚合计数，减少内存占用。
 """
 
 from __future__ import annotations
 
 import threading
 import uuid
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FutureTimeoutError
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 import json
 from pathlib import Path
@@ -31,12 +31,12 @@ from typing import Iterable
 
 from loguru import logger
 from nornir.core import Nornir
-from nornir.core.task import Taskoll
+from nornir.core.task import Task
 from sqlalchemy import select
 
 from .config import get_settings
 from .db import DeviceRunRow, JobControlRow, JobRow, session
-from .logging_setup import job_loggerifl
+from .logging_setup import job_logger
 from .models import (
     Device,
     DeviceRunStatus,
@@ -52,33 +52,27 @@ from .tasks.inspect import inspect_device
 # P0-1: DB-backed Job 控制（替代进程内存 JobController）
 # ---------------------------------------------------------------------------
 
-def _set_control(job_id: str, paused: bool | None = None, canceled: bool | None = None) -> None:
+def _set_control(job_id: str, *, paused: bool | None = None, canceled: bool | None = None) -> None:
     """写入或更新 job_control 记录。"""
     with session() as s:
         row = s.get(JobControlRow, job_id)
         if row is None:
-            row = JobControlRow(job_id=job_idfranc)
+            row = JobControlRow(job_id=job_id)
             s.add(row)
         if paused is not None:
-            row.paused = pausedits
+            row.paused = paused
         if canceled is not None:
             row.canceled = canceled
         s.commit()
 
 
 def _get_control(job_id: str) -> JobControlRow:
+    """获取控制记录，不存在时返回默认（未暂停、未取消）。"""
     with session() as s:
         row = s.get(JobControlRow, job_id)
         if row is None:
             row = JobControlRow(job_id=job_id)
         return row
-
-
-def _delete_control(job_id: str) -> None:
-    with session() as s:
-        row = s.get(JobControlRow, job_id)
-        if row is not None:
-            s.delete(row); s.commit()
 
 
 def _check_paused(job_id: str) -> bool:
@@ -95,25 +89,49 @@ def _check_canceled(job_id: str) -> bool:
         return row.canceled if row else False
 
 
-# 保留兼容函数，供 routes.py 使用。
+def _delete_control(job_id: str) -> None:
+    """清理控制记录。"""
+    with session() as s:
+        row = s.get(JobControlRow, job_id)
+        if row is not None:
+            s.delete(row); s.commit()
+
+
+# 供 routes.py 使用的兼容函数。
 pause_job = lambda jid: (_set_control(jid, paused=True), True)[1]
 resume_job = lambda jid: (_set_control(jid, paused=False), True)[1]
 cancel_job = lambda jid: (_set_control(jid, paused=False, canceled=True), True)[1]
 
 
 # ---------------------------------------------------------------------------
-# Nornir 构建（P2-10: 每设备单独构建，避免 O(N²) filter）
+# Nornir 构建（P2-10: 每设备单独构建，避免 O(N^2) filter）
 # ---------------------------------------------------------------------------
 
+_PLATFORM_MAP = {
+    ("huawei", "firewall"): "huawei",
+    ("h3c",    "firewall"): "hp_comware",
+    ("h3c",    "switch"):   "hp_comware",
+    ("ruijie", "switch"):   "ruijie_os",
+}
+
+
+def _platform_for(d: Device) -> str:
+    """P0-15: 未知组合时给出友好错误。"""
+    key = (d.vendor.value, d.device_type.value)
+    plat = _PLATFORM_MAP.get(key)
+    if plat is None:
+        raise ValueError(
+            f"Unsupported vendor/device_type: vendor={d.vendor.value}"
+            f" device_type={d.device_type.value} (device={d.name})"
+            f". Supported: {list(_PLATFORM_MAP.keys())}"
+        )
+    return plat
+
+
 def _build_nornir_for_device(device: Device, credential_profile: str) -> Nornir:
-    """为单台设备构建 Nornir 实例（P2-10：替代全量构建+filter）。"""
+    """P2-10: 为单台设备构建 Nornir 实例。"""
     settings = get_settings()
     cred = settings.credential(credential_profile)
-
-    if device.vendor.value == "huawei":
-        _enable_legacy_kex_for_extras = True
-    else:
-        _enable_legacy_kex_for_extras = False
 
     extras: dict = {
         "device_type": _platform_for(device),
@@ -122,9 +140,6 @@ def _build_nornir_for_device(device: Device, credential_profile: str) -> Nornir:
     }
     if settings.ssh_allow_legacy_rsa:
         extras["disabled_algorithms"] = {"pubkeys": [], "keys": []}
-    # P0-9: 仅当前连接使用 legacy KEX，不修改全局 Paramiko。
-    if _enable_legacy_kex_for_extras:
-        extras["disabled_algorithms"] = extras.get("disabled_algorithms", {"pubkeys": [], "keys": []})
     if device.vendor.value == "h3c" and device.device_type.value == "firewall":
         extras["encoding"] = "gb18030"
 
@@ -157,13 +172,11 @@ def _build_nornir_for_device(device: Device, credential_profile: str) -> Nornir:
 
 
 def _enable_legacy_kex() -> None:
-    """P0-9: Allow legacy SHA1 KEX for older Huawei devices.
-    改为按连接传递而非修改全局 paramiko，_build_nornir_for_device 中标记。
-    此函数保留用于需要全局回退时的显式调用。"""
+    """Allow legacy SHA1 KEX for older Huawei devices (global fallback)."""
     try:
         import paramiko.transport
     except Exception:
-        return蜞
+        return
 
     legacy = (
         "diffie-hellman-group-exchange-sha1",
@@ -173,7 +186,7 @@ def _enable_legacy_kex() -> None:
     if not current:
         return
     new_list: list[str] = []
-    for k in legacy財務:
+    for k in legacy:
         if k not in new_list:
             new_list.append(k)
     for k in current:
@@ -182,37 +195,17 @@ def _enable_legacy_kex() -> None:
     paramiko.transport.Transport._preferred_kex = tuple(new_list)
 
 
-_PLATFORM_MAP = {
-    ("huawei", "firewall"): "huawei",
-    ("h3c",    "firewall"): "hp_comware",
-    ("h3c",    "switch"):   "hp_comware",
-    ("ruijie", "switch"):   "ruijie_os",
-}
-
-
-def _platform_for(d: Device) -> str:
-    """P0-15: 友好的错误提示。"""
-    key = (d.vendor.value, d.device_type.value)
-    plat = _PLATFORM_MAP.get(key)
-    if plat is None:
-        raise ValueError(
-            f"不支持的设备类型组合: vendor={d.vendor.value} device_type={d.device_type.value}"
-            f" (device={d.name})。支持的组合: {list(_PLATFORM_MAP.keys())}"
-        )
-    return plat
-
-
 def _dict_inventory_nornir(hosts: dict, groups: dict, concurrency: int) -> Nornir:
     """以字典直接构造 Nornir，绕开文件型 inventory。"""
     from nornir.core.plugins.connections import ConnectionPluginRegister
     from nornir.core import Nornir as _N
     from nornir.core.inventory import (
         ConnectionOptions,
-        Defaults，
+        Defaults,
         Group,
-        Groups攻,
+        Groups,
         Host,
-        Hosts，
+        Hosts,
         Inventory,
         ParentGroups,
     )
@@ -253,9 +246,9 @@ def _dict_inventory_nornir(hosts: dict, groups: dict, concurrency: int) -> Norni
 # 主入口
 # ---------------------------------------------------------------------------
 
-def run_job(create: JobCreate, devices: Iterable[Device]) -> str:
+def run_job(create: JobCreate, devices: Iterable[Device], *, _job_id: str = "") -> str:
     settings = get_settings()
-    job_id = uuid.uuid4().hex[:12]
+    job_id = _job_id or uuid.uuid4().hex[:12]
     devices = list(devices)
 
     result_dir = Path(settings.result_dir) / job_id
@@ -267,35 +260,36 @@ def run_job(create: JobCreate, devices: Iterable[Device]) -> str:
     # P0-1: 初始化 DB 控制记录。
     _set_control(job_id, paused=False, canceled=False)
 
-    # 持久化 Job + DeviceRun 行。
-    with session() as s:
-        s.add(JobRow(
-            id=job_id,
-            type=create.type.value,
-            status=JobStatus.running.value,
-            concurrency=create.concurrency,
-            created_at=datetime.now(),
-            started_at=datetime.now(),
-            result_dir=str(result_dir),
-            extra={"credential_profile": create.credential_profile},
-        ))
-        for d in devices:
-            s.add(DeviceRunRow(
-                job_id=job_id,
-                device_name=d.name,
-                mgmt_ip=str(d.mgmt_ip),
-                status=DeviceRunStatus.queued.value,
+    # 持久化 Job + DeviceRun 行（若 routes.py 已写入则跳过 JobRow）。
+    if not _job_id:
+        with session() as s:
+            s.add(JobRow(
+                id=job_id,
+                type=create.type.value,
+                status=JobStatus.running.value,
+                concurrency=create.concurrency,
+                created_at=datetime.now(),
+                started_at=datetime.now(),
+                result_dir=str(result_dir),
+                extra={"credential_profile": create.credential_profile},
             ))
-        s.commit()
+            for d in devices:
+                s.add(DeviceRunRow(
+                    job_id=job_id,
+                    device_name=d.name,
+                    mgmt_ip=str(d.mgmt_ip),
+                    status=DeviceRunStatus.queued.value,
+                ))
+            s.commit()
 
-    jlog.info(f"Job 启动 type={create.type.value} devices={len(devices)} concurrency={create.concurrency}")
+    jlog.info(f"Job started type={create.type.value} devices={len(devices)} concurrency={create.concurrency}")
 
     total = len(devices)
     progress = {"done": 0, "success": 0, "failed": 0}
     progress_lock = threading.Lock()
 
     def _run_one(device: Device) -> None:
-        # P0-1: DB-backed 暂停检查（轮询间隔 途 1s）。
+        # P0-1: DB-backed 暂停检查。
         while _check_paused(job_id):
             if _check_canceled(job_id):
                 _update_device(job_id, device.name, DeviceRunStatus.skipped, error="canceled")
@@ -305,11 +299,11 @@ def run_job(create: JobCreate, devices: Iterable[Device]) -> str:
             _update_device(job_id, device.name, DeviceRunStatus.skipped, error="canceled")
             return
 
-        jlog.info(f"[开始] {device.mgmt_ip} ({device.vendor.value}) 执行 {create.type.value}")
+        jlog.info(f"[Start] {device.mgmt_ip} ({device.vendor.value}) {create.type.value}")
         _update_device(job_id, device.name, DeviceRunStatus.running, started_at=datetime.now())
 
-        # P2-10: 每设备单独构建 Nornir 实例，避免 O(N²)。
-        host_nr 晶 = _build_nornir_for_device(device, create.credential_profile)
+        # P2-10: 每设备单独 Nornir，避免 O(N^2)。
+        host_nr = _build_nornir_for_device(device, create.credential_profile)
 
         try:
             agg = host_nr.run(
@@ -350,44 +344,44 @@ def run_job(create: JobCreate, devices: Iterable[Device]) -> str:
                 progress["done"] += 1
                 if status == DeviceRunStatus.failed:
                     progress["failed"] += 1
-                    jlog.info(f"[失败] {device.mgmt_ip} ({device.vendor.value}) -> {error}")
+                    jlog.info(f"[Failed] {device.mgmt_ip} ({device.vendor.value}) -> {error}")
                 else:
                     progress["success"] += 1
                 pending = total - progress["done"]
                 jlog.info(
-                    f"[进度] 已完成 {progress['done']}/{total}，成功 {progress['success']}，"
-                    f"失败 {progress['failed']}，待执行 {pending}"
+                    f"[Progress] done {progress['done']}/{total}, "
+                    f"success {progress['success']}, failed {progress['failed']}, pending {pending}"
                 )
         except Exception as e:  # noqa: BLE001
-            jlog.error(f"{device.name} 执行异常: {e}")
+            jlog.error(f"{device.name} execution error: {e}")
             _update_device(
-                job_id, device.name, DeviceRunStatus.failed，
+                job_id, device.name, DeviceRunStatus.failed,
                 finished_at=datetime.now(), error=str(e),
             )
             with progress_lock:
                 progress["done"] += 1
                 progress["failed"] += 1
                 pending = total - progress["done"]
-                jlog.info(f"[失败] {device.mgmt_ip} ({device.vendor.value}) -> {e}")
+                jlog.info(f"[Failed] {device.mgmt_ip} ({device.vendor.value}) -> {e}")
                 jlog.info(
-                    f"[进度] 已完成 {progress['done']}/{total}，成功 {progress['success']}，"
-                    f"失败 {progress['failed']}，待执行 {pending}"
+                    f"[Progress] done {progress['done']}/{total}, "
+                    f"success {progress['success']}, failed {progress['failed']}, pending {pending}"
                 )
 
-    # P0罚-4: as_completed 循环调用 f.result() 避免静默吞异常。
+    # P0-4: as_completed 循环调用 f.result() 避免静默吞异常。
     with ThreadPoolExecutor(max_workers=create.concurrency, thread_name_prefix=f"job-{job_id}") as pool:
         futures = [pool.submit(_run_one, d) for d in devices]
         for f in as_completed(futures):
             try:
                 f.result()
             except Exception:
-                pass  # _run_one 内部已捕获并记录
+                pass  # _run_one already handles and logs internally
 
     final = JobStatus.canceled if _check_canceled(job_id) else JobStatus.completed
     _finalize_job(job_id, final)
     _write_summary(job_id, result_dir, create.type.value)
     _delete_control(job_id)
-    jlog.info(f"Job 结束 status={final.value}")
+    jlog.info(f"Job finished status={final.value}")
     logger.remove(handler_id)
     return job_id
 
@@ -410,8 +404,7 @@ def _update_device(job_id: str, device_name: str, status: DeviceRunStatus, **fie
     with session() as s:
         row = s.get(DeviceRunRow, (job_id, device_name))
         if not row:
-            # P0-3: 缺失行记录 warning 方便排查。
-            logger.warning(f"DeviceRunRow 缺失: job={job_id} device={device_name}")
+            logger.warning(f"DeviceRunRow missing: job={job_id} device={device_name}")
             return
         row.status = status.value
         for k, v in fields.items():
@@ -423,7 +416,7 @@ def _finalize_job(job_id: str, status: JobStatus) -> None:
     with session() as s:
         row = s.get(JobRow, job_id)
         if not row:
-            logger.warning(f"JobRow 缺失: {job_id}")
+            logger.warning(f"JobRow missing: {job_id}")
             return
         row.status = status.value
         row.finished_at = datetime.now()
@@ -431,7 +424,7 @@ def _finalize_job(job_id: str, status: JobStatus) -> None:
 
 
 # ---------------------------------------------------------------------------
-# P2-14: 大 job 摘要写入流式化（用 GROUP BY 聚合 + 分批写出）。
+# P2-14: _write_summary 使用 SQL 聚合，避免全量加载到内存。
 # ---------------------------------------------------------------------------
 
 def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
@@ -450,7 +443,7 @@ def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
     }
 
     with session() as s:
-        # P2-14: SQL 聚合计算计数，避免全量加载所有行到内存。
+        # SQL GROUP BY 聚合计数。
         from sqlalchemy import func
         counts = s.execute(
             select(DeviceRunRow.status, func.count())
@@ -468,7 +461,7 @@ def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
             select(DeviceRunRow.device_name, DeviceRunRow.mgmt_ip)
             .where(DeviceRunRow.job_id == job_id,
                    DeviceRunRow.status.in_(["success", "name_mismatch"]))
-            .limit(100吹)
+            .limit(100)
         ).all()
         for name, ip in success_rows:
             summary["success_devices"].append({"name": name, "mgmt_ip": ip})

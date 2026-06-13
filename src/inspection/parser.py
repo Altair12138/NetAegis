@@ -7,8 +7,50 @@
    version / hostname / interface_brief / lldp）；
 3. 仍无法解析则返回 {"raw_kept": true}，保留原文不丢数据。
 
-对外接口稳定：parse(vendor, device_type, command, raw) -> Any | None
+P3-22: ParsedResult 联合类型，替换裸 Any。
 """
+
+from __future__ import annotations
+
+import re
+from typing import Any, TypedDict, Union
+
+
+class VersionInfo(TypedDict, total=False):
+    version: str
+    uptime: str
+
+
+class HostnameInfo(TypedDict):
+    hostname: str
+
+
+class InterfaceBriefRow(TypedDict):
+    name: str
+    admin_or_oper_1: str
+    admin_or_oper_2: str
+    raw: str
+
+
+class LLDPNeighbor(TypedDict, total=False):
+    local_intf: str
+    neighbor_device: str
+    neighbor_port: str
+
+
+class RawKept(TypedDict):
+    raw_kept: bool
+
+
+# P3-22: 类型化的解析结果。
+ParsedResult = Union[
+    VersionInfo,
+    HostnameInfo,
+    list[InterfaceBriefRow],
+    list[LLDPNeighbor],
+    RawKept,
+    list[dict[str, Any]],  # ntc-templates 返回格式不可控，保持宽松
+]
 
 from __future__ import annotations
 
@@ -54,7 +96,7 @@ _COMMAND_ALIAS = {
 }
 
 
-def parse(vendor: str, device_type: str, command: str, raw: str) -> Any | None:
+def parse(vendor: str, device_type: str, command: str, raw: str) -> ParsedResult | None:
     """主入口。返回结构化结果或 None（拿不到时调用方自行降级）。"""
     if not raw:
         return None
@@ -85,7 +127,10 @@ def parse(vendor: str, device_type: str, command: str, raw: str) -> Any | None:
 # 内置兜底解析（仅覆盖最常用、跨厂商通用的几个）
 # ---------------------------------------------------------------------------
 
-_RE_HOSTNAME = re.compile(r"(?:sysname|hostname)\s+(\S+)", re.I)
+from ..naming import HOSTNAME_RE
+
+# For backward compatibility, keep as alias.
+_RE_HOSTNAME = HOSTNAME_RE
 _RE_VERSION_VRP = re.compile(r"VRP\s+\(R\)\s+software,\s+Version\s+([\w\.\-]+)", re.I)
 _RE_VERSION_COMWARE = re.compile(r"Comware\s+Software,\s+Version\s+([\w\.\-]+)", re.I)
 _RE_VERSION_RGOS = re.compile(r"(?:RGOS|RG-NOS)\s+(?:Software\s+,?\s+)?Version\s+([\w\.\(\)\-]+)", re.I)

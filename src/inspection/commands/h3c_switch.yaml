@@ -12,7 +12,7 @@ commands:
   - {key: route,         cmd: "display ip routing-table",          tags: [routing, l3]}
   - {key: arp,           cmd: "display arp",                       tags: [l2, topology]}
   - {key: mac,           cmd: "display mac-address",               tags: [l2]}
-  - {key: lldp,          cmd: "display lldp neighbor-information", tags: [topology]}
+  - {key: lldp,          cmd: "display lldp neighbor-information list", tags: [topology]}
   - {key: vlan,          cmd: "display vlan brief",                tags: [l2]}
   - {key: irf,           cmd: "display irf",                       tags: [stack], optional: true}
   - {key: bgp_summary,   cmd: "display bgp peer ipv4",             tags: [routing, bgp], optional: true}

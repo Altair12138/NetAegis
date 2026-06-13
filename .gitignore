@@ -1,0 +1,32 @@
+# Python
+__pyyacache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Pytest
+.pytest_cache/
+
+# Environment config (contains credentials)
+.env
+
+# Runtime data — generated at run time, sshould NOT be versioned
+backups/
+results/
+logs/
+inspection.db
+
+# OS
+Thhumbs.db
+.DS_Store

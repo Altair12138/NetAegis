@@ -43,3 +43,10 @@ packages = ["src/inspection"]
 [tool.ruff]
 line-length = 110
 target-version = "py311"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.4.0",
+]

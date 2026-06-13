@@ -4,6 +4,8 @@
 其中末段（编号）允许多个连字符，例如：
     SH-MH-401-C11U3-H3CS9825-G0-A04008
     SH-MH-601-C02U43-H3CS6850-C0-IntCPU-11212
+
+P3-17: 统一 HOSTNAME_RE 供 parser.py / verify_name.py 复用。
 """
 
 from __future__ import annotations
@@ -20,6 +22,9 @@ _PATTERN = re.compile(
     r"(?P<role>[A-Z0-9]+)-"
     r"(?P<suffix>.+)$"
 )
+
+# P3-17: 统一 hostname 提取正则，避免 parser.py 和 verify_name.py 重复定义。
+HOSTNAME_RE = re.compile(r"(?:sysname|hostname)\s+(\S+)", re.IGNORECASE)
 
 _VENDOR_PREFIX = {
     "HW": "huawei",

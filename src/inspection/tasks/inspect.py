@@ -10,7 +10,6 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -67,7 +66,6 @@ def inspect_device(
         raw_sections.append(_section("__connect__", f"<<ERROR>> {code}: {detail}"))
         _write_outputs(
             log_path,
-            json_path,
             raw_sections,
             commands_payload,
             device,
@@ -200,8 +198,8 @@ def inspect_device(
         config_entry = next((c for c in commands_payload if c["key"] == "config" and c.get("raw")), None)
         if config_entry:
             try:
-                backup_info = backup_store.save(device.name, config_entry["raw"], job_id=job_id)
-                log.info(f"backup saved: sha={backup_info['sha256'][:8]} "
+                backup_info = backup_store.save(device.name, config_entry["raw"], vendor=device.vendor.value, job_id=job_id)
+                log.info(f"backup saved: sha={backup_info['md5'][:8]} "
                          f"deduped={backup_info['deduped']}")
             except Exception as e:  # noqa: BLE001
                 log.error(f"backup save failed: {e}")
@@ -241,28 +239,6 @@ def _write_outputs(
     backup_info: dict | None,
 ) -> None:
     log_path.write_text("\n".join(raw_sections), encoding="utf-8")
-    structured = {
-        "device": {
-            "name": device.name,
-            "mgmt_ip": str(device.mgmt_ip),
-            "vendor": device.vendor.value,
-            "device_type": device.device_type.value,
-            "model": device.model,
-        },
-        "job_type": job_type.value,
-        "collected_at": datetime.now().isoformat(timespec="seconds"),
-        "name_check": {
-            "expected": device.name,
-            "actual": actual_hostname,
-            "mismatch": name_mismatch,
-        },
-        "raw_log": log_path.name,
-        "commands": commands_payload,
-        "errors": errors,
-        "warnings": (["name_mismatch"] if name_mismatch else []),
-        "backup": backup_info,
-    }
-    json_path.write_text(json.dumps(structured, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _subtask_error(result: Result) -> str:
