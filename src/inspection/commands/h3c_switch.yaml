@@ -1,0 +1,38 @@
+# 华三交换机（S 系列，Comware 平台）巡检命令
+sysname_cmd: "display current-configuration | include sysname"
+backup_cmd:  "display current-configuration"
+commands:
+  - {key: version,       cmd: "display version",                   tags: [basic]}
+  - {key: device_info,   cmd: "display device",                    tags: [basic]}
+  - {key: serial,        cmd: "display device manuinfo",           tags: [basic]}
+  - {key: cpu,           cmd: "display cpu-usage",                 tags: [health]}
+  - {key: memory,        cmd: "display memory",                    tags: [health]}
+  - {key: interface,     cmd: "display interface brief",           tags: [interface]}
+  - {key: interface_err, cmd: "display interface | include error|CRC", tags: [interface, health]}
+  - {key: route,         cmd: "display ip routing-table",          tags: [routing, l3]}
+  - {key: arp,           cmd: "display arp",                       tags: [l2, topology]}
+  - {key: mac,           cmd: "display mac-address",               tags: [l2]}
+  - {key: lldp,          cmd: "display lldp neighbor-information", tags: [topology]}
+  - {key: vlan,          cmd: "display vlan brief",                tags: [l2]}
+  - {key: irf,           cmd: "display irf",                       tags: [stack], optional: true}
+  - {key: bgp_summary,   cmd: "display bgp peer ipv4",             tags: [routing, bgp], optional: true}
+  - {key: ospf_summary,  cmd: "display ospf peer",                 tags: [routing, ospf], optional: true}
+
+  # ---------- M-LAG / S-MLAG（高可用） ----------
+  - {key: mlag_summary,  cmd: "display m-lag summary",             tags: [mlag, ha], optional: true}
+  - {key: mlag_verbose,  cmd: "display m-lag verbose",             tags: [mlag, ha], optional: true}
+  - {key: mlag_keepalive,cmd: "display m-lag keepalive",           tags: [mlag, ha], optional: true}
+  - {key: mlag_consistency, cmd: "display m-lag consistency type all", tags: [mlag, ha], optional: true}
+  - {key: mlag_mac,      cmd: "display m-lag mac",                 tags: [mlag, ha, l2], optional: true}
+  - {key: smlag,         cmd: "display s-mlag",                    tags: [mlag, ha], optional: true}
+
+  # ---------- RoCEv2（PFC / ECN / DCBX / QoS 队列） ----------
+  - {key: pfc_interface, cmd: "display priority-flow-control interface", tags: [rocev2, pfc, qos], optional: true}
+  - {key: pfc_counter,   cmd: "display priority-flow-control statistics", tags: [rocev2, pfc, qos, health], optional: true}
+  - {key: ecn_config,    cmd: "display qos wred interface",        tags: [rocev2, ecn, qos], optional: true}
+  - {key: ecn_counter,   cmd: "display qos queue ecn interface",   tags: [rocev2, ecn, qos, health], optional: true}
+  - {key: dcbx,          cmd: "display dcbx interface",            tags: [rocev2, dcb], optional: true}
+  - {key: qos_queue,     cmd: "display qos queue-statistics interface", tags: [rocev2, qos, health], optional: true}
+  - {key: buffer_usage,  cmd: "display buffer usage",              tags: [rocev2, health], optional: true}
+
+  - {key: config,        cmd: "display current-configuration",     tags: [config]}

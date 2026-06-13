@@ -1,0 +1,44 @@
+{
+  "job_id": "8973833840ef",
+  "job_type": "inspect",
+  "completed_at": "2026-05-31T13:45:20",
+  "total": 5,
+  "success": 4,
+  "failed": 1,
+  "skipped": 0,
+  "success_devices": [
+    {
+      "name": "SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09",
+      "mgmt_ip": "192.168.199.240"
+    },
+    {
+      "name": "SH-MH-601-A04U4-H3CM9K-Int-FW-15001",
+      "mgmt_ip": "192.168.199.242"
+    },
+    {
+      "name": "SH-MH-604-F19U40-RGS6990-G0-B04012",
+      "mgmt_ip": "192.168.199.243"
+    },
+    {
+      "name": "SH-MH-M404-E02U49-HWUSG6655F-intFW-02002",
+      "mgmt_ip": "192.168.199.241"
+    }
+  ],
+  "failed_devices": [
+    {
+      "name": "SH-MH-402-F09U9-RGS6980-G0-B03033",
+      "mgmt_ip": "192.168.199.244",
+      "error": "__connect__:connect_timeout: TCP connection to device failed.\n\nCommon causes of this problem are:\n1. Incorrect hostname or IP address.\n2. Wrong TCP port.\n3. Intermediate firewall blocking access.\n\nDevice settings: ruijie_os 192.168.199.244:22\n\n"
+    }
+  ],
+  "skipped_devices": [],
+  "failure_groups": {
+    "connect_timeout": [
+      {
+        "name": "SH-MH-402-F09U9-RGS6980-G0-B03033",
+        "mgmt_ip": "192.168.199.244",
+        "error": "__connect__:connect_timeout: TCP connection to device failed.\n\nCommon causes of this problem are:\n1. Incorrect hostname or IP address.\n2. Wrong TCP port.\n3. Intermediate firewall blocking access.\n\nDevice settings: ruijie_os 192.168.199.244:22\n\n"
+      }
+    ]
+  }
+}

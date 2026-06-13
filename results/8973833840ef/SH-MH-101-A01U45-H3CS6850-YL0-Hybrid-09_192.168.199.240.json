@@ -1,0 +1,29 @@
+{
+  "device": {
+    "name": "SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09",
+    "mgmt_ip": "192.168.199.240",
+    "vendor": "h3c",
+    "device_type": "switch",
+    "model": "S6850"
+  },
+  "job_type": "inspect",
+  "collected_at": "2026-05-31T13:45:19",
+  "name_check": {
+    "expected": "SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09",
+    "actual": "SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09",
+    "mismatch": false
+  },
+  "raw_log": "SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09_192.168.199.240.log",
+  "commands": [
+    {
+      "key": "lldp",
+      "cmd": "display lldp neighbor-information",
+      "raw": "LLDP neighbor-information of port 17[GigabitEthernet1/0]:\nLLDP agent nearest-bridge:\n LLDP neighbor index : 1\n ChassisID/subtype   : 5000-0004-0001/MAC address\n PortID/subtype      : Gi0/1/Interface name\n Capabilities        : Bridge, Router\n",
+      "parsed": null,
+      "error": null
+    }
+  ],
+  "errors": {},
+  "warnings": [],
+  "backup": null
+}

@@ -1,0 +1,42 @@
+# Nornir groups：按 vendor+device_type 提供默认连接参数。
+# Netmiko device_type 映射:
+#   huawei  → huawei         (VRP)
+#   h3c     → hp_comware
+#   ruijie  → ruijie_os
+
+huawei_firewall:
+  platform: huawei
+  connection_options:
+    netmiko:
+      extras:
+        device_type: huawei
+        global_delay_factor: 1
+        conn_timeout: 15
+        read_timeout_override: 60
+
+h3c_firewall:
+  platform: hp_comware
+  connection_options:
+    netmiko:
+      extras:
+        device_type: hp_comware
+        conn_timeout: 15
+        read_timeout_override: 60
+
+h3c_switch:
+  platform: hp_comware
+  connection_options:
+    netmiko:
+      extras:
+        device_type: hp_comware
+        conn_timeout: 15
+        read_timeout_override: 60
+
+ruijie_switch:
+  platform: ruijie_os
+  connection_options:
+    netmiko:
+      extras:
+        device_type: ruijie_os
+        conn_timeout: 15
+        read_timeout_override: 60

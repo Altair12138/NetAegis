@@ -1,0 +1,31 @@
+{
+  "device": {
+    "name": "SH-MH-604-F19U40-RGS6990-G0-B04012",
+    "mgmt_ip": "192.168.199.243",
+    "vendor": "ruijie",
+    "device_type": "switch",
+    "model": "S6990"
+  },
+  "job_type": "inspect",
+  "collected_at": "2026-05-31T13:45:18",
+  "name_check": {
+    "expected": "SH-MH-604-F19U40-RGS6990-G0-B04012",
+    "actual": "SH-MH-402-F09U9-RGS6980-G0-B03033",
+    "mismatch": true
+  },
+  "raw_log": "SH-MH-604-F19U40-RGS6990-G0-B04012_192.168.199.243.log",
+  "commands": [
+    {
+      "key": "lldp",
+      "cmd": "show lldp neighbors",
+      "raw": "Capability codes:\n    (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n    (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nSystem Name                 Local Intf          Port ID                          Capability   Aging-time\nSH-MH-101-A01U45-H3CS6850-Y Gi0/1               GigabitEthernet1/0               B, R         2minutes 1seconds \nL0-Hybrid-09                \nSH-MH-601-A04U4-H3CM9K-Int- Gi0/3               GigabitEthernet1/0               B, R         1minutes 55seconds \nFW-15001                    \n\nTotal entries displayed: 2",
+      "parsed": null,
+      "error": null
+    }
+  ],
+  "errors": {},
+  "warnings": [
+    "name_mismatch"
+  ],
+  "backup": null
+}

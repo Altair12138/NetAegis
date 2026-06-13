@@ -1,0 +1,7 @@
+===== __sysname__: display current-configuration | include sysname =====
+2026-05-31 21:47:12.030 +08:00
+sysname SH-MH-M404-E02U49-HWUSG6655F-intFW-02002
+
+===== lldp: display lldp neighbor brief =====
+2026-05-31 21:47:12.120 +08:00
+ Error:The global LLDP function is disabled.

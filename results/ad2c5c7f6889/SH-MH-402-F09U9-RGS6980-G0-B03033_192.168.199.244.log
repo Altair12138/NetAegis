@@ -1,0 +1,11 @@
+===== __connect__ =====
+<<ERROR>> connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: ruijie_os 192.168.199.244:22
+
+

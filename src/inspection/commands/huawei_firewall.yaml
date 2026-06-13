@@ -1,0 +1,18 @@
+# 华为防火墙（USG 系列，VRP 平台）巡检命令
+# tags 用于"按主题"批量选择，常用：basic / health / interface / routing / topology / security / ha / config
+sysname_cmd: "display current-configuration | include sysname"
+backup_cmd:  "display current-configuration"
+commands:
+  - {key: version,      cmd: "display version",                          tags: [basic]}
+  - {key: device_info,  cmd: "display device",                           tags: [basic]}
+  - {key: serial,       cmd: "display device manufacture-info",          tags: [basic]}
+  - {key: cpu,          cmd: "display cpu-usage",                        tags: [health]}
+  - {key: memory,       cmd: "display memory-usage",                     tags: [health]}
+  - {key: interface,    cmd: "display interface brief",                  tags: [interface]}
+  - {key: route,        cmd: "display ip routing-table",                 tags: [routing, l3]}
+  - {key: arp,          cmd: "display arp",                              tags: [l2, topology]}
+  - {key: lldp,         cmd: "display lldp neighbor brief",              tags: [topology]}
+  - {key: session,      cmd: "display firewall session table",           tags: [security]}
+  - {key: ha,           cmd: "display hrp state",                        tags: [ha]}
+  - {key: bgp_summary,  cmd: "display bgp peer",                         tags: [routing, bgp], optional: true}
+  - {key: config,       cmd: "display current-configuration",            tags: [config]}

@@ -1,0 +1,37 @@
+# 锐捷交换机巡检命令（RGOS）
+sysname_cmd: "show running-config | include hostname"
+backup_cmd:  "show running-config"
+commands:
+  - {key: version,       cmd: "show version",                      tags: [basic]}
+  - {key: device_info,   cmd: "show version slots",                tags: [basic]}
+  - {key: serial,        cmd: "show manuinfo",                     tags: [basic]}
+  - {key: cpu,           cmd: "show cpu",                          tags: [health]}
+  - {key: memory,        cmd: "show memory",                       tags: [health]}
+  - {key: interface,     cmd: "show interface status",             tags: [interface]}
+  - {key: interface_err, cmd: "show interface counters errors",    tags: [interface, health]}
+  - {key: route,         cmd: "show ip route",                     tags: [routing, l3]}
+  - {key: arp,           cmd: "show arp",                          tags: [l2, topology]}
+  - {key: mac,           cmd: "show mac-address-table",            tags: [l2]}
+  - {key: lldp,          cmd: "show lldp neighbors",               tags: [topology]}
+  - {key: vlan,          cmd: "show vlan brief",                   tags: [l2]}
+  - {key: vsu,           cmd: "show switch virtual",               tags: [stack], optional: true}
+  - {key: bgp_summary,   cmd: "show bgp summary",                  tags: [routing, bgp], optional: true}
+  - {key: ospf_summary,  cmd: "show ip ospf neighbor",             tags: [routing, ospf], optional: true}
+
+  # ---------- M-LAG（锐捷 RG-S6520/S6920/S6510 等数据中心交换机） ----------
+  - {key: mlag_summary,    cmd: "show mlag summary",               tags: [mlag, ha], optional: true}
+  - {key: mlag_brief,      cmd: "show mlag brief",                 tags: [mlag, ha], optional: true}
+  - {key: mlag_peer,       cmd: "show mlag peer-link",             tags: [mlag, ha], optional: true}
+  - {key: mlag_keepalive,  cmd: "show mlag keepalive",             tags: [mlag, ha], optional: true}
+  - {key: mlag_consistency,cmd: "show mlag consistency-parameters global", tags: [mlag, ha], optional: true}
+
+  # ---------- RoCEv2（PFC / ECN / DCBX / QoS 队列） ----------
+  - {key: pfc_interface, cmd: "show priority-flow-control interface",  tags: [rocev2, pfc, qos], optional: true}
+  - {key: pfc_counter,   cmd: "show priority-flow-control statistics", tags: [rocev2, pfc, qos, health], optional: true}
+  - {key: ecn_config,    cmd: "show qos wred interface",                tags: [rocev2, ecn, qos], optional: true}
+  - {key: ecn_counter,   cmd: "show qos queue statistics ecn",          tags: [rocev2, ecn, qos, health], optional: true}
+  - {key: dcbx,          cmd: "show dcbx interface",                    tags: [rocev2, dcb], optional: true}
+  - {key: qos_queue,     cmd: "show qos queue-statistics interface",    tags: [rocev2, qos, health], optional: true}
+  - {key: buffer_usage,  cmd: "show buffer usage",                      tags: [rocev2, health], optional: true}
+
+  - {key: config,        cmd: "show running-config",               tags: [config]}

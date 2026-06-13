@@ -1,0 +1,1061 @@
+=========================================================================
+ 🔎 开始精确审计 Telemetry 配置（区分缺失与不一致）...
+=========================================================================
+[31m❌ [ 配置不一致 ] -> SH-MH-101-B07U12-H3CS9825-GL0-09232_10.254.128.79.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-101-B07U7-H3CS9825-GL0-09231_10.254.128.78.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-101-B24U12-H3CS9825-GL0-09230_10.254.128.77.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-101-B24U7-H3CS9825-GL0-09229_10.254.128.76.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U12-H3CS9825-GL0-09234_10.254.128.81.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U17-H3CS9825-GL0-09235_10.254.128.82.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U22-H3CS9825-GL0-09236_10.254.128.83.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U27-H3CS9825-GL0-09237_10.254.128.84.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U32-H3CS9825-GL0-09238_10.254.128.85.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-D01U7-H3CS9825-GL0-09233_10.254.128.80.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-F01U23-H3CS9825-GL0-09240_10.254.128.87.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-102-G28U23-H3CS9825-GL0-09239_10.254.128.86.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-C13U13-H3CS9825-GL0-09113_10.252.240.134.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-C13U3-H3CS9825-GL0-09109_10.252.240.130.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-C13U8-H3CS9825-GL0-09111_10.252.240.132.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-H30U13-H3CS9825-GL0-09114_10.252.240.135.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-H30U3-H3CS9825-GL0-09110_10.252.240.131.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-103-H30U8-H3CS9825-GL0-09112_10.252.240.133.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-C14U13-H3CS9825-GL0-09119_10.252.240.140.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-C14U3-H3CS9825-GL0-09115_10.252.240.136.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-C14U8-H3CS9825-GL0-09117_10.252.240.138.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-G30U13-H3CS9825-GL0-09120_10.252.240.141.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-G30U3-H3CS9825-GL0-09116_10.252.240.137.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-104-G30U8-H3CS9825-GL0-09118_10.252.240.139.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-201-C14U25-H3CS9825-GL0-09428_10.252.241.27.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U12-H3CS9825-GL0-09242_10.254.128.89.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U17-H3CS9825-GL0-09243_10.254.128.90.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U22-H3CS9825-GL0-09244_10.254.128.91.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U27-H3CS9825-GL0-09245_10.254.128.92.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U32-H3CS9825-GL0-09246_10.254.128.93.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-D01U7-H3CS9825-GL0-09241_10.254.128.88.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-F01U23-H3CS9825-GL0-09248_10.254.128.95.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-202-G28U23-H3CS9825-GL0-09247_10.254.128.94.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-301-B07U12-H3CS9825-GL0-09252_10.254.128.99.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-301-B07U7-H3CS9825-GL0-09251_10.254.128.98.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-301-B24U12-H3CS9825-GL0-09250_10.254.128.97.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 整体缺失 ] -> SH-MH-301-B24U23-H3CS9825-beijian-2_10.254.137.38.log[0m
+   原因: 日志中完全未找到 telemetry 配置块
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-301-B24U7-H3CS9825-GL0-09249_10.254.128.96.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U12-H3CS9825-GL0-09254_10.254.128.101.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U17-H3CS9825-GL0-09255_10.254.128.102.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U22-H3CS9825-GL0-09256_10.254.128.103.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U27-H3CS9825-GL0-09257_10.254.128.104.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U32-H3CS9825-GL0-09258_10.254.128.105.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-D01U7-H3CS9825-GL0-09253_10.254.128.100.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-F01U2-H3CS9825-GL0-09260_10.254.128.107.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-302-G28U2-H3CS9825-GL0-09259_10.254.128.106.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-401-D09U38-H3CS9825-GL0-09105_10.252.81.170.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-402-F09U21-H3CS9825-GL0-09121_10.252.240.142.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-402-K09U21-H3CS9825-GL0-09122_10.252.240.143.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-501-L10U40-H3CS9825-GL0-09101_10.252.80.228.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+   当前: sensor path buffermonitor/portquedropevent
+   当前: sensor path buffermonitor/portqueoverrunevent
+   当前: destination-group Telemetry-test_Server
+   当前: ipv4-address 10.252.78.54 port 4317 vpn-instance MGT
+   当前: ipv4-address 10.252.78.73 port 4317 vpn-instance MGT
+   当前: destination-group Telemetry-test_Server
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-502-F09U36-H3CS9825-GL0-09102_10.252.80.229.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-502-K09U36-H3CS9825-GL0-09103_10.252.80.230.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U14-H3CS9825-G1-A01006_10.252.80.25.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U19-H3CS9825-G1-A01005_10.252.80.24.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U24-H3CS9825-G1-A01004_10.252.80.23.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U29-H3CS9825-G1-A01003_10.252.80.22.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U34-H3CS9825-G1-A01002_10.252.80.21.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U39-H3CS9825-G1-A01001_10.252.80.20.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U4-H3CS9825-G1-A01008_10.252.80.27.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A06U9-H3CS9825-G1-A01007_10.252.80.26.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U14-H3CS9825-G1-A01014_10.252.80.33.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U19-H3CS9825-G1-A01013_10.252.80.32.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U24-H3CS9825-G1-A01012_10.252.80.31.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U29-H3CS9825-G1-A01011_10.252.80.30.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U34-H3CS9825-G1-A01010_10.252.80.29.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U39-H3CS9825-G1-A01009_10.252.80.28.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U4-H3CS9825-G1-A01016_10.252.80.35.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A07U9-H3CS9825-G1-A01015_10.252.80.34.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U14-H3CS9825-G1-A01022_10.252.80.41.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U19-H3CS9825-G1-A01021_10.252.80.40.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U24-H3CS9825-G1-A01020_10.252.80.39.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U29-H3CS9825-G1-A01019_10.252.80.38.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U34-H3CS9825-G1-A01018_10.252.80.37.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U39-H3CS9825-G1-A01017_10.252.80.36.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U4-H3CS9825-G1-A01024_10.252.80.43.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A08U9-H3CS9825-G1-A01023_10.252.80.42.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U14-H3CS9825-G1-A01030_10.252.80.49.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U19-H3CS9825-G1-A01029_10.252.80.48.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U24-H3CS9825-G1-A01028_10.252.80.47.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U29-H3CS9825-G1-A01027_10.252.80.46.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U34-H3CS9825-G1-A01026_10.252.80.45.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U39-H3CS9825-G1-A01025_10.252.80.44.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U4-H3CS9825-G1-A01032_10.252.80.51.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-A09U9-H3CS9825-G1-A01031_10.252.80.50.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B06U34-H3CS9825-G2-A01002_10.252.80.5.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B06U39-H3CS9825-G2-A01001_10.252.80.4.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B07U34-H3CS9825-G2-A01004_10.252.80.7.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B07U39-H3CS9825-G2-A01003_10.252.80.6.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B09U34-H3CS9825-G2-A01006_10.252.80.9.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B09U39-H3CS9825-G2-A01005_10.252.80.8.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B10U34-H3CS9825-G2-A01008_10.252.80.11.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-B10U39-H3CS9825-G2-A01007_10.252.80.10.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-C07U33-H3CS9825-G1-A02002_10.252.80.53.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-C07U38-H3CS9825-G1-A02001_10.252.80.52.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-E01U14-H3C9825-beijian-1_10.252.81.93.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path bgp/sessions
+   标准: sensor path components/component/state/temperature
+   标准: sensor path device/boards
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+   标准: sensor-group group4
+   标准: sensor path ifmgr/interfaceevent
+   标准: destination-group Telemetry_Server_2
+   标准: subscription 4
+   标准: sensor-group group4
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I07U33-H3CS9825-G2-A02002_10.252.80.13.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I07U38-H3CS9825-G2-A02001_10.252.80.12.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I09U33-H3CS9825-G2-A02004_10.252.80.15.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I09U38-H3CS9825-G2-A02003_10.252.80.14.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I10U33-H3CS9825-G2-A02006_10.252.80.17.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I10U38-H3CS9825-G2-A02005_10.252.80.16.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I11U33-H3CS9825-G2-A02008_10.252.80.19.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-I11U38-H3CS9825-G2-A02007_10.252.80.18.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-601-M11U32-H3CS9825-GL0-09104_10.252.80.231.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-602-D11U23-H3CS9825-GL0-09108_10.252.81.173.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-602-F09U23-H3CS9825-GL0-09107_10.252.81.172.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-602-G11U23-H3CS9825-GL0-09106_10.252.81.171.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-603-C12U40-H3CS9825-GL0-09423_10.252.240.244.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-603-C13U40-H3CS9825-GL0-09424_10.252.240.245.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+   当前: destination-group Test-server
+   当前: ipv4-address 10.252.78.54 port 4318 vpn-instance MGT
+   标准: subscription 4
+   标准: sensor-group group4
+   标准: destination-group Telemetry_Server_2
+   当前: subscription 4 gnmi
+   当前: sensor-group group2
+   当前: destination-group Test-server
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-603-H01U40-H3CS9825-GL0-09425_10.252.240.246.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-604-B13U40-H3CS9825-GL0-09426_10.252.240.247.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+[31m❌ [ 配置不一致 ] -> SH-MH-604-F30U40-H3CS9825-GL0-09427_10.252.240.248.log[0m
+   --- 差异详情 (< 标准模板 / > 该设备日志) ---
+   标准: sensor path buffermonitor/commbufferusages
+   标准: sensor path buffermonitor/ecnandwredstatistics
+   标准: sensor path buffermonitor/egressdrops
+   标准: sensor path buffermonitor/pfcspeeds
+   标准: sensor path buffermonitor/pfcstatistics
+   标准: sensor path components/component/state/temperature
+   标准: sensor path components/component/transceiver
+   当前: sensor path device/transceivers
+   标准: sensor path terminal-device/logical-channels/channel/ethernet/state/pre-fec-ber
+-------------------------------------------------------------------------
+=========================================================================
+ 🏁 审计报告
+=========================================================================
+  📊 总计扫描文件: 508 个
+  🟢 完全合规设备: 396 个
+  🟡 条目缺失设备: 1 个
+  🔴 配置错误设备: 111 个
+=========================================================================

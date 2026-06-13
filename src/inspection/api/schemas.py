@@ -1,0 +1,77 @@
+"""API 输入输出 schema（与 models.Job 区分，避免序列化耦合）。"""
+
+from __future__ import annotations
+
+from datetime import datetime
+from typing import Literal
+
+from pydantic import BaseModel, Field
+
+
+class CreateJobRequest(BaseModel):
+    type: Literal["inspect", "backup"] = "inspect"
+    inventory_source: Literal["csv", "cmdb"] = "csv"
+    inventory_path: str | None = "inventory/devices.csv"
+    device_filter: dict | None = None
+    concurrency: int = Field(default=20, ge=1, le=200)
+    credential_profile: str = "default"
+    command_keys: list[str] | None = None      # 例 ["lldp", "route"]
+    command_tags: list[str] | None = None      # 例 ["routing"], ["topology"]
+    enable_parse: bool = False                 # 是否启用 ntc-templates 解析
+    auto_backup: bool = True                   # 是否自动入库 config
+
+
+class ScheduleCreate(BaseModel):
+    id: str
+    trigger_type: Literal["cron", "interval", "date"]
+    trigger_args: dict                          # cron: {hour, minute, day_of_week}; interval: {hours}; date: {run_date}
+    inventory_path: str = "inventory/devices.csv"
+    job_type: Literal["inspect", "backup"] = "inspect"
+    concurrency: int = 20
+    credential_profile: str = "default"
+    command_keys: list[str] | None = None
+    command_tags: list[str] | None = None
+    device_filter: dict | None = None
+
+
+class InventoryPreviewRequest(BaseModel):
+    inventory_source: Literal["csv", "cmdb"] = "csv"
+    inventory_path: str | None = "inventory/devices.csv"
+    device_filter: dict | None = None
+
+
+class InventoryPreviewResponse(BaseModel):
+    total: int
+    valid: int
+    invalid: int
+    errors: list[dict]
+    sample_devices: list[dict]
+
+
+class JobBrief(BaseModel):
+    id: str
+    type: str
+    status: str
+    concurrency: int
+    created_at: datetime
+    started_at: datetime | None
+    finished_at: datetime | None
+    paused_at: datetime | None
+    result_dir: str
+
+
+class DeviceRunBrief(BaseModel):
+    device_name: str
+    mgmt_ip: str
+    status: str
+    started_at: datetime | None
+    finished_at: datetime | None
+    log_path: str | None
+    json_path: str | None
+    name_mismatch: bool
+    error: str | None
+
+
+class JobDetail(JobBrief):
+    progress: dict[str, int]
+    devices: list[DeviceRunBrief]
