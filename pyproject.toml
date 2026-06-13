@@ -2,7 +2,7 @@
 name = "NetAegis"
 version = "0.1.0"
 description = "Automated network inspection & backup platform (Nornir + Netmiko + FastAPI)"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
   "nornir>=3.4",
   "nornir-netmiko>=1.0",
@@ -42,7 +42,7 @@ packages = ["src/inspection"]
 
 [tool.ruff]
 line-length = 110
-target-version = "py311"
+target-version = "py310"
 
 [dependency-groups]
 dev = [
