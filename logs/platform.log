@@ -1756,3 +1756,159 @@ Device settings: hp_comware 10.10.1.6:22
 2026-06-14 12:44:32 | INFO    | -            | device save success
 2026-06-14 12:44:32 | INFO    | 65c6a3b605d0 | [Progress] done 5/5, success 4, failed 1, pending 0
 2026-06-14 12:44:32 | INFO    | 65c6a3b605d0 | Job finished status=completed
+2026-06-15 20:14:49 | INFO    | 55454db9326d | Job started type=backup devices=5 concurrency=20
+2026-06-15 20:14:49 | INFO    | 55454db9326d | [Start] 192.168.199.240 (h3c) backup
+2026-06-15 20:14:49 | INFO    | 55454db9326d | [Start] 192.168.199.243 (ruijie) backup
+2026-06-15 20:14:49 | INFO    | 55454db9326d | [Start] 192.168.199.242 (h3c) backup
+2026-06-15 20:14:49 | INFO    | 55454db9326d | [Start] 10.10.1.6 (h3c) backup
+2026-06-15 20:14:49 | INFO    | 55454db9326d | [Start] 192.168.199.241 (huawei) backup
+2026-06-15 20:14:50 | WARNING | -            | hostname 不一致 expected=SH-MH-401-C03U20-HWUSG6650-F0-01 actual=SH-MH-M404-E02U49-HWUSG6655F-intFW-02002
+2026-06-15 20:14:50 | INFO    | -            | backup saved: sha256=2eb05c57 deduped=False
+2026-06-15 20:14:50 | INFO    | -            | backup saved: sha256=dd9c8ce3 deduped=False
+2026-06-15 20:14:50 | INFO    | -            | device save success
+2026-06-15 20:14:50 | INFO    | 55454db9326d | [Progress] done 1/5, success 1, failed 0, pending 4
+2026-06-15 20:14:51 | INFO    | -            | backup saved: sha256=f019b54c deduped=False
+2026-06-15 20:14:51 | INFO    | -            | backup saved: sha256=f211a804 deduped=False
+2026-06-15 20:14:51 | INFO    | -            | device save success
+2026-06-15 20:14:51 | INFO    | 55454db9326d | [Progress] done 2/5, success 2, failed 0, pending 3
+2026-06-15 20:14:51 | INFO    | -            | device save success
+2026-06-15 20:14:51 | INFO    | 55454db9326d | [Progress] done 3/5, success 3, failed 0, pending 2
+2026-06-15 20:15:04 | ERROR   | -            | 连接失败: connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:15:04 | INFO    | 55454db9326d | [Failed] 10.10.1.6 (h3c) -> __connect__:connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:15:04 | INFO    | 55454db9326d | [Progress] done 4/5, success 3, failed 1, pending 1
+2026-06-15 20:15:20 | INFO    | -            | device save success
+2026-06-15 20:15:20 | INFO    | 55454db9326d | [Progress] done 5/5, success 4, failed 1, pending 0
+2026-06-15 20:15:20 | INFO    | 55454db9326d | Job finished status=completed
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | Job started type=backup devices=5 concurrency=20
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | [Start] 192.168.199.240 (h3c) backup
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | [Start] 192.168.199.241 (huawei) backup
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | [Start] 192.168.199.243 (ruijie) backup
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | [Start] 10.10.1.6 (h3c) backup
+2026-06-15 20:20:00 | INFO    | 0f3fe6c47133 | [Start] 192.168.199.242 (h3c) backup
+2026-06-15 20:20:01 | WARNING | -            | hostname 不一致 expected=SH-MH-401-C03U20-HWUSG6650-F0-01 actual=SH-MH-M404-E02U49-HWUSG6655F-intFW-02002
+2026-06-15 20:20:01 | INFO    | -            | backup saved: sha256=18d470e0 deduped=False
+2026-06-15 20:20:01 | INFO    | -            | backup saved: sha256=2eb05c57 deduped=True
+2026-06-15 20:20:01 | INFO    | -            | device save success
+2026-06-15 20:20:01 | INFO    | 0f3fe6c47133 | [Progress] done 1/5, success 1, failed 0, pending 4
+2026-06-15 20:20:02 | INFO    | -            | backup saved: sha256=f019b54c deduped=True
+2026-06-15 20:20:02 | INFO    | -            | backup saved: sha256=f211a804 deduped=True
+2026-06-15 20:20:02 | INFO    | -            | device save success
+2026-06-15 20:20:02 | INFO    | 0f3fe6c47133 | [Progress] done 2/5, success 2, failed 0, pending 3
+2026-06-15 20:20:02 | INFO    | -            | device save success
+2026-06-15 20:20:02 | INFO    | 0f3fe6c47133 | [Progress] done 3/5, success 3, failed 0, pending 2
+2026-06-15 20:20:15 | ERROR   | -            | 连接失败: connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:20:15 | INFO    | 0f3fe6c47133 | [Failed] 10.10.1.6 (h3c) -> __connect__:connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:20:15 | INFO    | 0f3fe6c47133 | [Progress] done 4/5, success 3, failed 1, pending 1
+2026-06-15 20:20:31 | INFO    | -            | device save success
+2026-06-15 20:20:32 | INFO    | 0f3fe6c47133 | [Progress] done 5/5, success 4, failed 1, pending 0
+2026-06-15 20:20:32 | INFO    | 0f3fe6c47133 | Job finished status=completed
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | Job started type=backup devices=5 concurrency=20
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | [Start] 192.168.199.240 (h3c) backup
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | [Start] 10.10.1.6 (h3c) backup
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | [Start] 192.168.199.242 (h3c) backup
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | [Start] 192.168.199.243 (ruijie) backup
+2026-06-15 20:33:26 | INFO    | 83bbc05565df | [Start] 192.168.199.241 (huawei) backup
+2026-06-15 20:33:26 | WARNING | -            | hostname 不一致 expected=SH-MH-401-C03U20-HWUSG6650-F0-01 actual=SH-MH-M404-E02U49-HWUSG6655F-intFW-02002
+2026-06-15 20:33:26 | INFO    | -            | backup saved: sha256=2eb05c57 deduped=True
+2026-06-15 20:33:26 | INFO    | -            | backup saved: sha256=18d470e0 deduped=True
+2026-06-15 20:33:27 | INFO    | -            | device save success
+2026-06-15 20:33:27 | INFO    | 83bbc05565df | [Progress] done 1/5, success 1, failed 0, pending 4
+2026-06-15 20:33:27 | INFO    | -            | backup saved: sha256=f019b54c deduped=True
+2026-06-15 20:33:27 | INFO    | -            | backup saved: sha256=f211a804 deduped=True
+2026-06-15 20:33:31 | INFO    | -            | device save success
+2026-06-15 20:33:31 | INFO    | 83bbc05565df | [Progress] done 2/5, success 2, failed 0, pending 3
+2026-06-15 20:33:31 | INFO    | -            | device save success
+2026-06-15 20:33:31 | INFO    | 83bbc05565df | [Progress] done 3/5, success 3, failed 0, pending 2
+2026-06-15 20:33:32 | INFO    | -            | device save success
+2026-06-15 20:33:32 | INFO    | 83bbc05565df | [Progress] done 4/5, success 4, failed 0, pending 1
+2026-06-15 20:33:41 | ERROR   | -            | 连接失败: connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:33:41 | INFO    | 83bbc05565df | [Failed] 10.10.1.6 (h3c) -> __connect__:connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:33:41 | INFO    | 83bbc05565df | [Progress] done 5/5, success 4, failed 1, pending 0
+2026-06-15 20:33:41 | INFO    | 83bbc05565df | Job finished status=completed
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | Job started type=inspect devices=5 concurrency=20
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Start] 192.168.199.240 (h3c) inspect
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Start] 10.10.1.6 (h3c) inspect
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Start] 192.168.199.243 (ruijie) inspect
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Start] 192.168.199.241 (huawei) inspect
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Start] 192.168.199.242 (h3c) inspect
+2026-06-15 20:35:43 | WARNING | -            | hostname 不一致 expected=SH-MH-401-C03U20-HWUSG6650-F0-01 actual=SH-MH-M404-E02U49-HWUSG6655F-intFW-02002
+2026-06-15 20:35:43 | INFO    | afb89863aac8 | [Progress] done 1/5, success 1, failed 0, pending 4
+2026-06-15 20:35:44 | INFO    | afb89863aac8 | [Progress] done 2/5, success 2, failed 0, pending 3
+2026-06-15 20:35:44 | INFO    | afb89863aac8 | [Progress] done 3/5, success 3, failed 0, pending 2
+2026-06-15 20:35:44 | INFO    | afb89863aac8 | [Progress] done 4/5, success 4, failed 0, pending 1
+2026-06-15 20:35:58 | ERROR   | -            | 连接失败: connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:35:58 | INFO    | afb89863aac8 | [Failed] 10.10.1.6 (h3c) -> __connect__:connect_timeout: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: hp_comware 10.10.1.6:22
+
+
+2026-06-15 20:35:58 | INFO    | afb89863aac8 | [Progress] done 5/5, success 4, failed 1, pending 0
+2026-06-15 20:35:58 | INFO    | afb89863aac8 | Job finished status=completed

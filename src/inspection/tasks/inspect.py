@@ -201,7 +201,7 @@ def inspect_device(
     save_result: dict | None = None
     if device_save and "__connect__" not in errors:
         try:
-            save_r = task.run(task=netmiko_save_config)
+            save_r = task.run(task=netmiko_save_config, confirm=True, confirm_response="y")
             if save_r.failed:
                 save_result = {"status": "failed", "error": _subtask_error(save_r)}
                 log.error(f"device save failed: {save_result['error']}")
