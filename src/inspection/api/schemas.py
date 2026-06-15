@@ -26,6 +26,7 @@ class CreateJobRequest(BaseModel):
     command_tags: list[str] | None = None
     enable_parse: bool = False
     auto_backup: bool = True
+    device_save: bool | None = None
 
 
 class ScheduleCreate(BaseModel):
@@ -77,6 +78,7 @@ class DeviceRunBrief(BaseModel):
     json_path: str | None
     name_mismatch: bool
     error: str | None
+    save_result: dict | None = None
 
 
 class JobDetail(JobBrief):

@@ -20,6 +20,9 @@ vim inventory/devices.csv
 uv run inspect run --inventory inventory/devices.csv --concurrency 20
 uv run inspect run --type backup --inventory inventory/devices.csv
 
+# 备份任务关闭设备端保存
+uv run inspect run --type backup --inventory inventory/devices.csv --no-save
+
 # 5. 启动 API
 uv run uvicorn inspection.api.main:app --reload --port 8080
 
@@ -27,6 +30,11 @@ uv run uvicorn inspection.api.main:app --reload --port 8080
 curl -X POST localhost:8080/api/jobs \
 	-H 'Content-Type: application/json' \
 	-d '{"type":"inspect","inventory_path":"inventory/devices.csv","concurrency":20}'
+
+# 备份任务默认保存，巡检不保存；可显式控制
+curl -X POST localhost:8080/api/jobs \
+	-H 'Content-Type: application/json' \
+	-d '{"type":"inspect","inventory_path":"inventory/devices.csv","device_save":true}'
 ```
 
 ## 目录结构
@@ -49,6 +57,9 @@ logs/                       运行日志
 | POST | `/api/jobs/{id}/pause` | 设备级暂停 |
 | POST | `/api/jobs/{id}/resume` | 恢复 |
 | GET | `/api/jobs/{id}/devices/{name}/log` | 下载原始日志 |
+| GET | `/api/jobs/{id}/devices/{name}/result` | 结构化结果（含 save_result） |
+| GET | `/api/devices/{name}/backups` | 配置备份历史 |
+| GET | `/api/devices/{name}/diff` | 配置差异对比 |
 
 完整接口见 OpenAPI（启动后访问 `/docs`）。
 
@@ -66,7 +77,7 @@ API_TOKEN=your_token_here
 curl -X POST localhost:8080/api/jobs \
 	-H 'Authorization: Bearer your_token_here' \
 	-H 'Content-Type: application/json' \
-	-d '{"type":"inspect","inventory_path":"inventory/devices.csv","concurrency":20}'
+	-d '{"type":"inspect","inventory_path":"inventory/devices.csv","concurrency":20,"device_save":true}'
 ```
 
 未设置 `API_TOKEN` 时会放行所有请求（开发模式）。

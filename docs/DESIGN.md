@@ -282,6 +282,9 @@ uv run inspect run --inventory inventory/devices.csv --concurrency 20
 # 备份配置
 uv run inspect run --type backup --inventory inventory/devices.csv
 
+# 关闭设备端保存（不在设备上执行 save / write memory）
+uv run inspect run --inventory inventory/devices.csv --no-save
+
 # 只对部分设备（按 vendor / device_type 过滤）
 uv run inspect run --type inspect --vendor h3c --device-type switch
 
@@ -328,6 +331,15 @@ POST /api/jobs
   "type": "inspect",
   "inventory_path": "inventory/devices.csv",
   "command_tags": ["routing", "health"]
+}
+```
+
+```http
+POST /api/jobs
+{
+  "type": "inspect",
+  "inventory_path": "inventory/devices.csv",
+  "device_save": false
 }
 ```
 
@@ -429,7 +441,7 @@ logs/
 
 | Method | Path | 说明 |
 | --- | --- | --- |
-| POST | `/api/jobs` | 创建巡检/备份任务（body: type、inventory_source、device_filter、concurrency） |
+| POST | `/api/jobs` | 创建巡检/备份任务（body: type、inventory_source、device_filter、concurrency、auto_backup、device_save） |
 | GET | `/api/jobs` | 任务列表（分页 + 状态过滤） |
 | GET | `/api/jobs/{id}` | 任务详情 + 进度 |
 | POST | `/api/jobs/{id}/pause` | 设备级暂停 |
@@ -439,6 +451,9 @@ logs/
 | GET | `/api/jobs/{id}/devices/{name}/log` | 下载单设备原始日志 |
 | GET | `/api/jobs/{id}/devices/{name}/result` | 二期：结构化 JSON 结果 |
 | POST | `/api/inventory/preview` | 上传 CSV / 触发 CMDB 同步预览 |
+
+> `GET /api/jobs/{id}` 返回的 `devices` 列表中每台设备包含 `save_result` 字段（`{status: "success"|"failed"|"skipped", ...}`），记录设备端保存结果。
+> `GET /api/jobs/{id}/devices/{name}/result` 的 JSON 中也包含 `save_result`。
 
 认证留出 `Depends(get_current_user)` 钩子，初期可使用 API Token，与公司 SSO 对接后切换。
 
@@ -491,6 +506,10 @@ logs/
 - 触发方式：
   - `JobType.backup` 任务（仅跑 `backup_cmd`）；
   - 任意 `inspect` 任务只要抓到 `config` key 且 `auto_backup=True`（默认开），就会自动入库；
+- **设备端保存（v0.2 新增）**：配置入库后，可选在设备上执行 `save` / `write memory` 持久化（由 `device_save` 控制，默认开启）。通过 `netmiko_save_config` 插件按平台自动选择命令：
+  - H3C: `save force`
+  - 华为: `save` + 自动响应 `[Y/N]` 确认
+  - 锐捷: `write memory`
 - 差异：`backup_store.diff(device, a_id=None, b_id=None)` 生成 unified diff。默认比"最近两版"，可显式指定任意两个备份 ID。
 - API：
   - `GET /api/devices/{name}/backups` 列表
@@ -547,4 +566,95 @@ curl -X POST localhost:8080/api/schedules \
 
 # 下载某次巡检的 Excel 报表
 curl -OJ localhost:8080/api/jobs/<job_id>/report.xlsx
+
+# 关闭设备端保存的巡检
+curl -X POST localhost:8080/api/jobs \
+  -H 'Content-Type: application/json' \
+  -d '{"type":"inspect","inventory_path":"inventory/devices.csv","device_save":false}'
 ```
+
+### 12.6 设备端配置保存（device_save）
+
+配置拉取入库后，可选在设备上执行 `save` / `write memory` 将 running-config 持久化到 startup-config。通过 `nornir-netmiko` 的 `netmiko_save_config` 插件实现，按平台自动选择命令：
+
+| Vendor | DeviceType | 实际命令 | 确认处理 |
+|--------|-----------|----------|---------|
+| h3c | switch/firewall | `save force` | force 跳过确认 |
+| huawei | firewall | `save` + `y` | Netmiko 自动响应 `[Y/N]` |
+| ruijie | switch | `write memory` | 无需确认 |
+
+**参数**：
+
+| 字段 | 类型 | 默认 | 说明 |
+|------|------|------|------|
+| `device_save` | `bool \| None` | `None` | `None` 时按 job_type 自动：backup→True，inspect→False；显式设 `true`/`false` 时强制 |
+
+**CLI**：
+
+```bash
+# 备份任务默认开启设备端保存
+uv run inspect run --type backup --inventory inventory/devices.csv
+
+# 备份任务关闭设备端保存
+uv run inspect run --type backup --inventory inventory/devices.csv --no-save
+
+# 巡检任务默认不做设备端保存，如需可显式开启（通过 API）
+uv run inspect run --inventory inventory/devices.csv
+```
+
+**API**：
+
+```http
+# 备份任务：默认 device_save=true
+POST /api/jobs
+{
+  "type": "backup",
+  "inventory_path": "inventory/devices.csv"
+}
+
+# 巡检任务：默认 device_save=false，可显式开启
+POST /api/jobs
+{
+  "type": "inspect",
+  "inventory_path": "inventory/devices.csv",
+  "device_save": true
+}
+
+# 显式关闭
+POST /api/jobs
+{
+  "type": "backup",
+  "inventory_path": "inventory/devices.csv",
+  "device_save": false
+}
+```
+
+**结果**：
+
+每台设备的 JSON 输出中新增 `save_result` 字段：
+
+```jsonc
+{
+  "save_result": {
+    "status": "success",        // "success" | "failed" | "skipped"
+    "output": "...device output..."  // 仅 success
+    // 或 "error": "..."  // 仅 failed
+    // 或 "reason": "device_save disabled"  // 仅 skipped
+  }
+}
+```
+
+`summary.json` 新增聚合统计：
+
+```jsonc
+{
+  "device_save_success": 45,
+  "device_save_failed": 2,
+  "device_save_skipped": 3,
+  "device_save_failed_devices": [
+    {"device": "SW-01", "error": "save timeout"}
+  ]
+}
+```
+
+`_run_one` 中若 `save_result.status == "failed"`，会将 `save_failed: <reason>` 追加到设备的 `error` 字段，确保失败在报表和日志中可见。

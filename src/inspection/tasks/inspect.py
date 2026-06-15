@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -18,14 +19,14 @@ from loguru import logger
 from netmiko import NetmikoAuthenticationException, NetmikoTimeoutException
 from nornir.core.exceptions import NornirSubTaskError
 from nornir.core.task import Result, Task
-from nornir_netmiko.tasks import netmiko_send_command
+from nornir_netmiko.tasks import netmiko_save_config, netmiko_send_command
 from paramiko.ssh_exception import SSHException
 
 from ..commands.loader import for_device
 from ..models import Device, JobType
 from ..naming import is_same_hostname
 from .. import backup_store
-from .verify_name import extract_hostname
+from .verify_name import extract_hostname_from_prompt
 
 try:
     from ..parser import parse as _parse_structured
@@ -43,8 +44,13 @@ def inspect_device(
     command_keys: list[str] | None = None,
     command_tags: list[str] | None = None,
     auto_backup: bool = True,
+    device_save: bool | None = None,
     job_id: str = "",
 ) -> Result:
+    # device_save 未显式设置时：backup 默认 True，inspect 默认 False
+    if device_save is None:
+        device_save = (job_type == JobType.backup)
+
     spec = for_device(device, job_type, keys=command_keys, tags=command_tags)
     base = result_dir / f"{device.name}_{device.mgmt_ip}"
     log_path = base.parent / f"{base.name}.log"
@@ -66,6 +72,7 @@ def inspect_device(
         raw_sections.append(_section("__connect__", f"<<ERROR>> {code}: {detail}"))
         _write_outputs(
             log_path,
+            json_path,
             raw_sections,
             commands_payload,
             device,
@@ -74,6 +81,7 @@ def inspect_device(
             name_mismatch=False,
             errors=errors,
             backup_info=None,
+            save_result=None,
         )
         return Result(
             host=task.host,
@@ -84,49 +92,32 @@ def inspect_device(
                 "json_path": str(json_path),
                 "name_mismatch": False,
                 "errors": errors,
+                "save_result": None,
                 "finished_at": datetime.now().isoformat(),
             },
             failed=True,
         )
 
-    # 1) 设备名核对
+    # 1) 设备名核对（通过 find_prompt() 获取提示符提取 hostname，无需发送命令，避免超时）
     name_mismatch = False
     actual_hostname: str | None = None
     try:
-        r = task.run(
-            task=netmiko_send_command,
-            command_string=spec["sysname_cmd"],
-            read_timeout=cmd_timeout,
-        )
-        if r.failed:
-            msg = _subtask_error(r)
-            if _is_connection_error(r):
-                code, detail = _classify_connection_error(r.exception)
-                errors["__connect__"] = f"{code}: {detail}"
-                log.error(f"连接失败: {code}: {detail}")
-            else:
-                errors["__sysname__"] = msg
-                log.error(f"sysname 抓取失败: {msg}")
-            raw_sections.append(_section(f"__sysname__: {spec['sysname_cmd']}", f"<<ERROR>> {msg}"))
-        else:
-            actual_hostname = extract_hostname(r.result)
-            if actual_hostname and not is_same_hostname(device.name, actual_hostname):
-                name_mismatch = True
-                log.warning(f"hostname 不一致 expected={device.name} actual={actual_hostname}")
-            raw_sections.append(_section(f"__sysname__: {spec['sysname_cmd']}", r.result))
-    except NornirSubTaskError as e:
-        msg, is_connect, code = _subtask_error_from_exception(e)
-        if is_connect:
-            errors["__connect__"] = f"{code}: {msg}"
-            log.error(f"连接失败: {code}: {msg}")
-        else:
-            errors["__sysname__"] = msg
-            log.error(f"sysname 抓取失败: {msg}")
-        raw_sections.append(_section(f"__sysname__: {spec['sysname_cmd']}", f"<<ERROR>> {msg}"))
+        conn = task.host.get_connection("netmiko", task.nornir.config)
+        prompt = conn.find_prompt()
+    except Exception as e:
+        errors["__sysname__"] = f"prompt读取失败: {e}"
+        log.error(f"prompt读取失败: {e}")
+        raw_sections.append(_section("__sysname__: (from prompt)", f"<<ERROR>> prompt读取失败: {e}"))
+    else:
+        actual_hostname = extract_hostname_from_prompt(prompt)
+        if actual_hostname and not is_same_hostname(device.name, actual_hostname):
+            name_mismatch = True
+            log.warning(f"hostname 不一致 expected={device.name} actual={actual_hostname}")
+        raw_sections.append(_section("__sysname__: (from prompt)", prompt))
 
     if "__connect__" in errors:
         _write_outputs(log_path, json_path, raw_sections, commands_payload, device, job_type,
-                       actual_hostname, name_mismatch, errors, backup_info=None)
+                       actual_hostname, name_mismatch, errors, backup_info=None, save_result=None)
         return Result(
             host=task.host,
             result={
@@ -136,6 +127,7 @@ def inspect_device(
                 "json_path": str(json_path),
                 "name_mismatch": name_mismatch,
                 "errors": errors,
+                "save_result": None,
                 "finished_at": datetime.now().isoformat(),
             },
             failed=True,
@@ -198,14 +190,34 @@ def inspect_device(
         config_entry = next((c for c in commands_payload if c["key"] == "config" and c.get("raw")), None)
         if config_entry:
             try:
-                backup_info = backup_store.save(device.name, config_entry["raw"], vendor=device.vendor.value, job_id=job_id)
-                log.info(f"backup saved: sha={backup_info['md5'][:8]} "
+                backup_info = backup_store.save(device.name, config_entry["raw"],
+                                                   vendor=device.vendor.value, job_id=job_id)
+                log.info(f"backup saved: sha256={backup_info['sha256'][:8]} "
                          f"deduped={backup_info['deduped']}")
             except Exception as e:  # noqa: BLE001
                 log.error(f"backup save failed: {e}")
 
+    # --- 设备端保存：在设备上执行 save / write memory ---
+    save_result: dict | None = None
+    if device_save and "__connect__" not in errors:
+        try:
+            save_r = task.run(task=netmiko_save_config)
+            if save_r.failed:
+                save_result = {"status": "failed", "error": _subtask_error(save_r)}
+                log.error(f"device save failed: {save_result['error']}")
+            else:
+                save_result = {"status": "success", "output": str(save_r.result)[:500]}
+                log.info(f"device save success")
+        except Exception as e:  # noqa: BLE001
+            save_result = {"status": "failed", "error": str(e)}
+            log.error(f"device save exception: {e}")
+    elif not device_save:
+        save_result = {"status": "skipped", "reason": "device_save disabled"}
+    elif "__connect__" in errors:
+        save_result = {"status": "skipped", "reason": "connection error"}
+
     _write_outputs(log_path, json_path, raw_sections, commands_payload, device, job_type,
-                   actual_hostname, name_mismatch, errors, backup_info)
+                   actual_hostname, name_mismatch, errors, backup_info, save_result)
 
     return Result(
         host=task.host,
@@ -216,6 +228,7 @@ def inspect_device(
             "json_path": str(json_path),
             "name_mismatch": name_mismatch,
             "errors": errors,
+            "save_result": save_result,
             "finished_at": datetime.now().isoformat(),
         },
         failed=bool(errors),
@@ -237,8 +250,32 @@ def _write_outputs(
     name_mismatch: bool,
     errors: dict[str, str],
     backup_info: dict | None,
+    save_result: dict | None = None,
 ) -> None:
     log_path.write_text("\n".join(raw_sections), encoding="utf-8")
+    structured = {
+        "device": {
+            "name": device.name,
+            "mgmt_ip": str(device.mgmt_ip),
+            "vendor": device.vendor.value,
+            "device_type": device.device_type.value,
+            "model": device.model,
+        },
+        "job_type": job_type.value,
+        "collected_at": datetime.now().isoformat(timespec="seconds"),
+        "name_check": {
+            "expected": device.name,
+            "actual": actual_hostname,
+            "mismatch": name_mismatch,
+        },
+        "raw_log": log_path.name,
+        "commands": commands_payload,
+        "errors": errors,
+        "warnings": (["name_mismatch"] if name_mismatch else []),
+        "backup": backup_info,
+        "save_result": save_result,
+    }
+    json_path.write_text(json.dumps(structured, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _subtask_error(result: Result) -> str:

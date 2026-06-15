@@ -1,0 +1,6 @@
+name,mgmt_ip,device_type,vendor,model,credential_profile,port
+SH-MH-101-A01U45-H3CS6850-YL0-Hybrid-09,192.168.199.240,switch,h3c,S9825,default,22
+SH-MH-601-C02U43-H3CS6850-C0-IntCPU-11212,10.10.1.6,switch,h3c,S6850,default,22
+SH-MH-402-F09U9-RGS6980-G0-B03033,192.168.199.243,switch,ruijie,S6510,default,22
+SH-MH-401-C03U20-HWUSG6650-F0-01,192.168.199.241,firewall,huawei,USG6650,default,22
+SH-MH-601-A04U4-H3CM9K-Int-FW-15001,192.168.199.242,firewall,h3c,F5060,default,22

@@ -10,11 +10,13 @@ from ..models import Device, JobType
 from .inspect import inspect_device
 
 
-def backup_device(task: Task, device: Device, result_dir: Path, cmd_timeout: int) -> Result:
+def backup_device(task: Task, device: Device, result_dir: Path, cmd_timeout: int,
+                  device_save: bool | None = None) -> Result:
     return inspect_device(
         task=task,
         device=device,
         job_type=JobType.backup,
         result_dir=result_dir,
         cmd_timeout=cmd_timeout,
+        device_save=device_save,
     )

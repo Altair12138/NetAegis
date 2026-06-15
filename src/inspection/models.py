@@ -71,6 +71,7 @@ class JobCreate(BaseModel):
     command_tags: list[str] | None = None       # 例: ["routing"] 或 ["topology"]
     enable_parse: bool = False                  # 二期：开启 ntc-templates 解析，结果填到 commands[].parsed
     auto_backup: bool = True                    # 抓到 'config' key 时自动入库到 backup_store
+    device_save: bool | None = None               # 采集后在设备端执行 save；None=按 job_type 自动（backup→True，inspect→False）
 
 
 class DeviceRun(BaseModel):

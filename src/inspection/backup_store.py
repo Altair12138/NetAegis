@@ -4,14 +4,14 @@
 ----
     backups/
         <device_name>/
-            20260530T120000Z_<md5_8>.cfg       # 华三/华为
-            20260601T080000Z_<md5_8>.text      # 锐捷
-            latest.cfg / latest.text          # 拷贝指向最新版本
-            <ts>_<md5_8>.cfg.diff              # 与上一版有差异时生成的 diff 文件
+            20260530T120000Z_<sha256_8>.cfg       # 华三/华为
+            20260601T080000Z_<sha256_8>.text      # 锐捷
+            latest.cfg / latest.text             # 拷贝指向最新版本
+            <ts>_<sha256_8>.cfg.diff              # 与上一版有差异时生成的 diff 文件
 
-MD5 去重 + 保留策略
-------------------
-保存前算整文件 MD5；若与该设备最新一版相同则跳过新建文件，仅更新 last_seen_at。
+SHA256 去重 + 保留策略
+----------------------
+保存前算整文件 SHA256；若与该设备最新一版相同则跳过新建文件，仅更新 last_seen_at。
 每设备最多保留最近 5 次备份，超出时自动删除旧文件及数据库记录。
 
 配置文件扩展名：
@@ -22,6 +22,7 @@ MD5 去重 + 保留策略
 from __future__ import annotations
 
 import hashlib
+import re
 from datetime import datetime
 from difflib import unified_diff
 from pathlib import Path
@@ -37,7 +38,7 @@ class BackupRow(Base):
     __tablename__ = "backups"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     device_name: Mapped[str] = mapped_column(String, index=True)
-    md5: Mapped[str] = mapped_column(String, index=True)  # 改为 MD5
+    sha256: Mapped[str] = mapped_column(String, index=True)
     path: Mapped[str] = mapped_column(String)
     size: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime, index=True)
@@ -53,7 +54,16 @@ def _backups_root() -> Path:
 
 
 def _ensure_tables() -> None:
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine())
+    # 迁移：将旧 md5 列重命名为 sha256（如果还存在）
+    with engine().connect() as conn:
+        # 检查旧列是否存在
+        cols = [row[1] for row in conn.exec_driver_sql(
+            "PRAGMA table_info('backups')"
+        ).fetchall()]
+        if "md5" in cols and "sha256" not in cols:
+            conn.exec_driver_sql("ALTER TABLE backups RENAME COLUMN md5 TO sha256")
+            conn.commit()
 
 
 def _ext_for(vendor: str) -> str:
@@ -65,18 +75,45 @@ def _ext_for(vendor: str) -> str:
     return ".cfg"  # 默认
 
 
+# diff 噪声过滤：时间戳替换 + 按 vendor 跳过配置 header
+_TIMESTAMP_RE = re.compile(
+    r"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[+-]\d{2}:\d{2})?"
+)
+
+# 各 vendor 配置正文的起始标记（只对比标记之后的内容）
+_HEADER_START_MARKERS: dict[str, re.Pattern] = {
+    "huawei": re.compile(r"^!Software Version", re.MULTILINE),
+    "h3c":    re.compile(r"^\s*version\s+\d", re.MULTILINE),
+    "ruijie": re.compile(r"^!\s*[Ss]oftware [Vv]ersion", re.MULTILINE),
+}
+
+
+def _prepare_for_diff(text: str, vendor: str = "") -> str:
+    """规范化配置文本：跳过 header 前导内容 + 替换时间戳为占位符。"""
+    # 1) 按 vendor 跳过 header 前导行（如 Huawei 的时间戳、备注等）
+    if vendor and vendor in _HEADER_START_MARKERS:
+        m = _HEADER_START_MARKERS[vendor].search(text)
+        if m:
+            text = text[m.start():]
+    # 2) 替换时间戳
+    text = _TIMESTAMP_RE.sub("<TS>", text)
+    return text
+
+
 def save(device_name: str, config_text: str, vendor: str = "", job_id: str = "") -> dict:
-    """保存一份配置文本。MD5的去重；同 MD5 仅刷新 last_seen_at。
+    """保存一份配置文本。SHA256 去重；同 SHA256 仅刷新 last_seen_at。
     每设备保留最近 5 次备份，超出删除旧文件+记录。
     若与上一版内容不同，生成 .diff 文件。
 
-    返回：{id, md5, path, diff_path, created, deduped, changed}
+    返回：{id, sha256, path, diff_path, created, deduped, changed}
     """
     _ensure_tables()
     if not config_text:
         raise ValueError("empty config text")
 
-    md5 = hashlib.md5(config_text.encode("utf-8", "ignore")).hexdigest()
+    # 基于规范化文本计算 SHA256，过滤时间戳/header 噪声，确保去重不受时间戳影响
+    normalized = _prepare_for_diff(config_text, vendor)
+    sha256 = hashlib.sha256(normalized.encode("utf-8", "ignore")).hexdigest()
     now = datetime.now()
     ext = _ext_for(vendor)
 
@@ -86,18 +123,20 @@ def save(device_name: str, config_text: str, vendor: str = "", job_id: str = "")
             .order_by(BackupRow.created_at.desc())
         ).scalars().first()
 
-        # MD5 去重：与最新一版相同则仅刷新时间戳
-        if latest and latest.md5 == md5:
-            latest.last_seen_at = now
-            s.commit()
-            return {"id": latest.id, "md5": md5, "path": latest.path,
-                    "created": False, "deduped": True, "changed": False,
-                    "diff_path": None}
+        # SHA256 去重：与最新一版相同且文件存在则仅刷新时间戳
+        if latest and latest.sha256 == sha256:
+            if Path(latest.path).exists():
+                latest.last_seen_at = now
+                s.commit()
+                return {"id": latest.id, "sha256": sha256, "path": latest.path,
+                        "created": False, "deduped": True, "changed": False,
+                        "diff_path": None}
+            # 文件已丢失，重新创建
 
         dev_dir = _backups_root() / device_name
         dev_dir.mkdir(parents=True, exist_ok=True)
         ts = now.strftime("%Y%m%dT%H%M%SZ")
-        path = dev_dir / f"{ts}_{md5[:8]}{ext}"
+        path = dev_dir / f"{ts}_{sha256[:8]}{ext}"
         path.write_text(config_text, encoding="utf-8")
 
         # latest 拷贝
@@ -109,24 +148,26 @@ def save(device_name: str, config_text: str, vendor: str = "", job_id: str = "")
         changed = False
         if latest is not None:
             try:
-                prev_text = Path(latest.path).read_text(encoding="utf-8").splitlines()
-                curr_text = config_text.splitlines()
+                prev_text = _prepare_for_diff(
+                    Path(latest.path).read_text(encoding="utf-8"), vendor
+                ).splitlines()
+                curr_text = _prepare_for_diff(config_text, vendor).splitlines()
                 diff_lines = list(unified_diff(
                     prev_text, curr_text,
-                    fromfile=f"{device_name}@{latest.created_at.isoformat()}",
-                    tofile=f"{device_name}@{now.isoformat()}",
+                    fromfile=f"{device_name}@v{latest.id}",
+                    tofile=f"{device_name}@{ts}",
                     lineterm="",
                 ))
                 if diff_lines:
                     changed = True
-                    diff_file = dev_dir / f"{ts}_{md5[:8]}{ext}.diff"
+                    diff_file = dev_dir / f"{ts}_{sha256[:8]}{ext}.diff"
                     diff_file.write_text("\n".join(diff_lines), encoding="utf-8")
                     diff_path = str(diff_file)
             except Exception:
                 pass  # diff 失败不影响保存
 
         row = BackupRow(
-            device_name=device_name, md5=md5, path=str(path),
+            device_name=device_name, sha256=sha256, path=str(path),
             size=len(config_text), created_at=now, last_seen_at=now,
             job_id=job_id, vendor=vendor,
         )
@@ -145,7 +186,7 @@ def save(device_name: str, config_text: str, vendor: str = "", job_id: str = "")
                 s.delete(stale)
             s.commit()
 
-        return {"id": row.id, "md5": md5, "path": str(path),
+        return {"id": row.id, "sha256": sha256, "path": str(path),
                 "created": True, "deduped": False, "changed": changed,
                 "diff_path": diff_path}
 
@@ -190,21 +231,26 @@ def diff(device_name: str, a_id: int | None = None, b_id: int | None = None) -> 
     if not a or not b:
         return {"changed": False, "reason": "backup not found"}
 
-    a_text = Path(a.path).read_text(encoding="utf-8").splitlines()
-    b_text = Path(b.path).read_text(encoding="utf-8").splitlines()
+    vendor = a.vendor or b.vendor or ""
+    a_text = _prepare_for_diff(
+        Path(a.path).read_text(encoding="utf-8"), vendor
+    ).splitlines()
+    b_text = _prepare_for_diff(
+        Path(b.path).read_text(encoding="utf-8"), vendor
+    ).splitlines()
 
     diff_lines = list(unified_diff(
         a_text, b_text,
-        fromfile=f"{device_name}@{a.created_at.isoformat()}",
-        tofile=f"{device_name}@{b.created_at.isoformat()}",
+        fromfile=f"{device_name}@v{a.id}",
+        tofile=f"{device_name}@v{b.id}",
         lineterm="",
     ))
     added = sum(1 for l in diff_lines if l.startswith("+") and not l.startswith("+++"))
     removed = sum(1 for l in diff_lines if l.startswith("-") and not l.startswith("---"))
     return {
         "device": device_name,
-        "from": {"id": a.id, "created_at": a.created_at.isoformat(), "md5": a.md5[:8]},
-        "to":   {"id": b.id, "created_at": b.created_at.isoformat(), "md5": b.md5[:8]},
+        "from": {"id": a.id, "created_at": a.created_at.isoformat(), "sha256": a.sha256[:8]},
+        "to":   {"id": b.id, "created_at": b.created_at.isoformat(), "sha256": b.sha256[:8]},
         "added_lines": added, "removed_lines": removed,
         "changed": bool(diff_lines),
         "diff": "\n".join(diff_lines),

@@ -255,7 +255,7 @@ def run_job(create: JobCreate, devices: Iterable[Device], *, _job_id: str = "") 
     result_dir.mkdir(parents=True, exist_ok=True)
     settings.log_dir.mkdir(parents=True, exist_ok=True)
 
-    jlog, handler_id = job_logger(job_id, settings.log_dirs)
+    jlog, handler_id = job_logger(job_id, settings.log_dir)
 
     # P0-1: 初始化 DB 控制记录。
     _set_control(job_id, paused=False, canceled=False)
@@ -316,6 +316,7 @@ def run_job(create: JobCreate, devices: Iterable[Device], *, _job_id: str = "") 
                 command_tags=create.command_tags,
                 enable_parse=create.enable_parse,
                 auto_backup=create.auto_backup,
+                device_save=create.device_save,
                 job_id=job_id,
             )
             host_res = agg[device.name][0]
@@ -330,6 +331,11 @@ def run_job(create: JobCreate, devices: Iterable[Device], *, _job_id: str = "") 
                 if payload.get("errors")
                 else (str(host_res.exception) if host_res.exception else None)
             )
+            # 设备端保存失败时追加到 error
+            save_result = payload.get("save_result") or {}
+            if save_result.get("status") == "failed":
+                save_err = f"save_failed: {save_result.get('error', 'unknown')}"
+                error = (error + "; " + save_err) if error else save_err
             _update_device(
                 job_id,
                 device.name,
@@ -389,14 +395,16 @@ def run_job(create: JobCreate, devices: Iterable[Device], *, _job_id: str = "") 
 def _dispatch(
     task: Task, device: Device, job_type: JobType, result_dir: Path, cmd_timeout: int,
     command_keys: list[str] | None = None, command_tags: list[str] | None = None,
-    enable_parse: bool = False, auto_backup: bool = True, job_id: str = "",
+    enable_parse: bool = False, auto_backup: bool = True, device_save: bool | None = None,
+    job_id: str = "",
 ):
     if job_type is JobType.backup:
-        return backup_device(task, device, result_dir, cmd_timeout)
+        return backup_device(task, device, result_dir, cmd_timeout, device_save=device_save)
     return inspect_device(
         task, device, job_type, result_dir, cmd_timeout,
         command_keys=command_keys, command_tags=command_tags,
-        enable_parse=enable_parse, auto_backup=auto_backup, job_id=job_id,
+        enable_parse=enable_parse, auto_backup=auto_backup,
+        device_save=device_save, job_id=job_id,
     )
 
 
@@ -440,6 +448,10 @@ def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
         "failed_devices": [],
         "skipped_devices": [],
         "failure_groups": {},
+        "device_save_success": 0,
+        "device_save_failed": 0,
+        "device_save_skipped": 0,
+        "device_save_failed_devices": [],
     }
 
     with session() as s:
@@ -485,6 +497,25 @@ def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
         for name, ip in skipped_rows:
             summary["skipped_devices"].append({"name": name, "mgmt_ip": ip})
 
+        # 聚合各设备 JSON 中的 save_result 统计
+        for json_file in result_dir.glob("*.json"):
+            try:
+                data = json.loads(json_file.read_text(encoding="utf-8"))
+                sr = data.get("save_result") or {}
+                status = sr.get("status", "unknown")
+                if status == "success":
+                    summary["device_save_success"] += 1
+                elif status == "failed":
+                    summary["device_save_failed"] += 1
+                    summary["device_save_failed_devices"].append({
+                        "device": data.get("device", {}).get("name", json_file.stem),
+                        "error": sr.get("error", "unknown"),
+                    })
+                elif status == "skipped":
+                    summary["device_save_skipped"] += 1
+            except Exception:
+                pass
+
     summary_json = result_dir / "summary.json"
     summary_txt = result_dir / "summary.txt"
     summary_json.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -518,6 +549,19 @@ def _write_summary(job_id: str, result_dir: Path, job_type: str) -> None:
         lines.append("Skipped devices:")
         for d in summary["skipped_devices"]:
             lines.append(f"- {d['name']} ({d['mgmt_ip']})")
+
+    # 设备端保存统计
+    save_total = summary["device_save_success"] + summary["device_save_failed"] + summary["device_save_skipped"]
+    if save_total > 0:
+        lines.append("")
+        lines.append("Device Save Results:")
+        lines.append(f"  Success: {summary['device_save_success']}")
+        lines.append(f"  Failed: {summary['device_save_failed']}")
+        lines.append(f"  Skipped: {summary['device_save_skipped']}")
+        if summary["device_save_failed_devices"]:
+            lines.append("  Save-failed devices:")
+            for d in summary["device_save_failed_devices"]:
+                lines.append(f"    - {d['device']}: {d['error']}")
 
     summary_txt.write_text("\n".join(lines), encoding="utf-8")
 

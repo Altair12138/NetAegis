@@ -140,6 +140,7 @@ def create_job(req: CreateJobRequest, bg: BackgroundTasks) -> JobBrief:
         command_tags=req.command_tags,
         enable_parse=req.enable_parse,
         auto_backup=req.auto_backup,
+        device_save=req.device_save,
     )
 
     import uuid

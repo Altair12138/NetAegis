@@ -30,6 +30,8 @@ def run(
                              help="逗号分隔的命令 key，仅跑这些命令，例：lldp,route"),
     tags: str = typer.Option(None, "--tags",
                              help="逗号分隔的 tag，命中任一即入选，例：topology 或 routing,health"),
+    no_save: bool = typer.Option(False, "--no-save",
+                                 help="不在网络设备上执行 save / write memory"),
 ):
     """触发巡检 / 备份。不指定 --keys/--tags 则跑全量。"""
     settings = get_settings()
@@ -48,6 +50,7 @@ def run(
             inventory_path=inventory_path,
             command_keys=[k.strip() for k in keys.split(",")] if keys else None,
             command_tags=[t.strip() for t in tags.split(",")] if tags else None,
+            device_save=False if no_save else None,  # None 由 job_type 决定：backup→True, inspect→False
         ),
         devices,
     )
