@@ -69,7 +69,7 @@ class JobCreate(BaseModel):
     # 命令子集过滤：两者可同时给，按"并集"选；都为空则跑全部
     command_keys: list[str] | None = None       # 例: ["lldp", "route"]
     command_tags: list[str] | None = None       # 例: ["routing"] 或 ["topology"]
-    enable_parse: bool = False                  # 二期：开启 ntc-templates 解析，结果填到 commands[].parsed
+    enable_parse: bool = True                   # 二期：开启 ntc-templates 解析，结果填到 commands[].parsed
     auto_backup: bool = True                    # 抓到 'config' key 时自动入库到 backup_store
     device_save: bool | None = None               # 采集后在设备端执行 save；None=按 job_type 自动（backup→True，inspect→False）
 

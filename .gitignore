@@ -1,6 +1,6 @@
 # Python
-__pyyacache__/
-*.py[cod]
+__pycache__/
+*.pyc
 *.egg-info/
 dist/
 build/
@@ -30,3 +30,11 @@ inspection.db
 # OS
 Thhumbs.db
 .DS_Store
+
+# log
+logs/
+
+# SQLite
+*.db-shm
+*.db-wal
+*.tar.gz

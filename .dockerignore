@@ -1,0 +1,47 @@
+# 版本控制
+.git
+.gitignore
+
+# Python 缓存
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+
+# 虚拟环境
+.venv
+venv
+
+# IDE / 编辑器
+.vscode
+.idea
+*.swp
+*.swo
+
+# 环境配置（包含敏感凭据，不打入镜像）
+.env
+
+# 运行时产物（通过 volume 持久化）
+inspection.db
+results/
+logs/
+backups/
+
+# 文档（不需要在运行时）
+docs/
+*.md
+!README.md
+
+# 测试
+tests/
+
+# Docker 自身
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# 杂项
+.DS_Store
+Thumbs.db

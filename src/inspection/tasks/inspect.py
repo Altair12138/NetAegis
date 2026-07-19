@@ -30,8 +30,9 @@ from .verify_name import extract_hostname_from_prompt
 
 try:
     from ..parser import parse as _parse_structured
-except Exception:  # noqa: BLE001 - parser 依赖 ntc-templates，未装时降级
+except Exception as _import_err:  # noqa: BLE001 - parser 导入失败时降级
     _parse_structured = None
+    logger.warning(f"parser import failed, parse disabled: {_import_err}")
 
 
 def inspect_device(
@@ -165,9 +166,13 @@ def inspect_device(
                         entry["parsed"] = _parse_structured(
                             device.vendor.value, device.device_type.value, cmd, r.result,
                         )
+                        log.debug(f"parse {key}: {type(entry['parsed']).__name__}"
+                                  f" ({len(entry['parsed']) if isinstance(entry['parsed'], list) else 'scalar'})")
                     except Exception as pe:  # noqa: BLE001
                         entry["parsed"] = None
                         entry["error"] = f"parse_failed: {pe}"
+                elif enable_parse and _parse_structured is None:
+                    log.debug(f"parse {key}: skipped (parser not available)")
         except NornirSubTaskError as e:
             msg, is_connect, code = _subtask_error_from_exception(e)
             entry["error"] = msg

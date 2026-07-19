@@ -10,7 +10,7 @@ commands:
   - {key: interface,    cmd: "display interface brief",          tags: [interface]}
   - {key: route,        cmd: "display ip routing-table",         tags: [routing, l3]}
   - {key: arp,          cmd: "display arp",                      tags: [l2, topology]}
-  - {key: lldp,         cmd: "display lldp neighbor-information",tags: [topology]}
+  - {key: lldp,         cmd: "display lldp neighbor-information list",tags: [topology]}
   - {key: session,      cmd: "display session table",            tags: [security]}
   - {key: ha,           cmd: "display redundancy group",         tags: [ha]}
   - {key: bgp_summary,  cmd: "display bgp peer ipv4",            tags: [routing, bgp], optional: true}

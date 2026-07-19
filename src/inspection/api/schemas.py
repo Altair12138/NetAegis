@@ -24,7 +24,7 @@ class CreateJobRequest(BaseModel):
     credential_profile: str = "default"
     command_keys: list[str] | None = None
     command_tags: list[str] | None = None
-    enable_parse: bool = False
+    enable_parse: bool = True
     auto_backup: bool = True
     device_save: bool | None = None
 

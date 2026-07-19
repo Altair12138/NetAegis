@@ -9,11 +9,14 @@ P0 改进:
 
 from __future__ import annotations
 
+import io
+import json
 import threading
+import zipfile
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Header, status
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Header, Query, status
+from fastapi.responses import FileResponse, StreamingResponse
 from loguru import logger
 
 from .. import backup_store, report, scheduler
@@ -33,12 +36,6 @@ from .schemas import (
     ScheduleCreate,
 )
 
-router = APIRouter(
-    prefix="/api",
-    tags=["inspection"],
-    dependencies=[Depends(_auth)],  # P3-18: 路由级统一认证，避免遗漏。
-)
-
 _DEFAULT_INVENTORY = get_settings().default_inventory_path  # P3-16
 
 
@@ -52,6 +49,13 @@ def _auth(authorization: str = Header(default="")):
         raise HTTPException(status_code=500, detail="API_TOKEN not configured")
     if authorization != f"Bearer {token}":
         raise HTTPException(status_code=401, detail="invalid token")
+
+
+router = APIRouter(
+    prefix="/api",
+    tags=["inspection"],
+    dependencies=[Depends(_auth)],  # P3-18: 路由级统一认证，避免遗漏。
+)
 
 
 # ---------------------------------------------------------------------------
@@ -237,6 +241,20 @@ def cancel(job_id: str):
     return {"ok": True}
 
 
+@router.get("/jobs/{job_id}/devices")
+def list_job_devices(job_id: str, status_filter: str | None = None):
+    """查询某 job 下所有设备的执行状态。"""
+    with session() as s:
+        row = s.get(JobRow, job_id)
+        if not row:
+            raise HTTPException(status_code=404, detail="job not found")
+        q = s.query(DeviceRunRow).filter(DeviceRunRow.job_id == job_id)
+        if status_filter:
+            q = q.filter(DeviceRunRow.status == status_filter)
+        devices = q.all()
+        return [_to_device_brief(d) for d in devices]
+
+
 @router.get("/jobs/{job_id}/devices/{device_name}/log")
 def get_log(job_id: str, device_name: str):
     """下载原始命令输出 .log"""
@@ -264,6 +282,94 @@ def get_result(job_id: str, device_name: str):
             row.json_path, settings.result_dir.resolve(),
             media_type="application/json", filename=Path(row.json_path).name,
         )
+
+
+@router.get("/jobs/{job_id}/results")
+def batch_results(job_id: str, status_filter: str | None = None):
+    """批量获取 job 下所有设备的结构化结果（JSON），打包为 ZIP 流式下载。"""
+    settings = get_settings()
+    with session() as s:
+        row = s.get(JobRow, job_id)
+        if not row:
+            raise HTTPException(status_code=404, detail="job not found")
+        q = s.query(DeviceRunRow).filter(DeviceRunRow.job_id == job_id)
+        if status_filter:
+            q = q.filter(DeviceRunRow.status == status_filter)
+        devices = q.all()
+
+    def _zip_stream():
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+            for d in devices:
+                if d.json_path and Path(d.json_path).exists():
+                    # 路径穿越校验
+                    resolved = Path(d.json_path).resolve()
+                    if not str(resolved).startswith(str(settings.result_dir.resolve())):
+                        continue
+                    zf.writestr(Path(d.json_path).name, resolved.read_text(encoding="utf-8"))
+                elif d.log_path and Path(d.log_path).exists():
+                    resolved = Path(d.log_path).resolve()
+                    if not str(resolved).startswith(str(settings.result_dir.resolve())):
+                        continue
+                    zf.writestr(Path(d.log_path).name, resolved.read_text(encoding="utf-8"))
+        buf.seek(0)
+        yield from buf
+
+    return StreamingResponse(
+        _zip_stream(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=job_{job_id}_results.zip"},
+    )
+
+
+@router.get("/devices/{device_name}/config")
+def get_device_config(device_name: str, job_id: str | None = None):
+    """获取设备最新配置。
+
+    优先从巡检结果 JSON 中提取 key=config 的 raw 内容；
+    若无巡检结果，则从 backup_store 获取最新备份。
+    可选 ?job_id= 指定从某次 job 的结果中提取。
+    """
+    # 1) 从巡检 JSON 提取
+    settings = get_settings()
+    with session() as s:
+        q = s.query(DeviceRunRow).filter(
+            DeviceRunRow.device_name == device_name,
+            DeviceRunRow.json_path.isnot(None),
+        ).order_by(DeviceRunRow.finished_at.desc())
+        if job_id:
+            q = q.filter(DeviceRunRow.job_id == job_id)
+        run = q.first()
+
+    if run and run.json_path and Path(run.json_path).exists():
+        resolved = Path(run.json_path).resolve()
+        if str(resolved).startswith(str(settings.result_dir.resolve())):
+            try:
+                data = json.loads(resolved.read_text(encoding="utf-8"))
+                config_entry = next(
+                    (c for c in data.get("commands", []) if c.get("key") == "config" and c.get("raw")),
+                    None,
+                )
+                if config_entry:
+                    return {"device": device_name, "source": "inspection", "config": config_entry["raw"]}
+            except Exception:  # noqa: BLE001
+                pass
+
+    # 2) 从 backup_store 获取最新备份
+    backups = backup_store.list_for(device_name, limit=1)
+    if backups:
+        b = backups[0]
+        if Path(b.path).exists():
+            return {
+                "device": device_name,
+                "source": "backup",
+                "backup_id": b.id,
+                "created_at": b.created_at.isoformat(),
+                "sha256": b.sha256[:8],
+                "config": Path(b.path).read_text(encoding="utf-8"),
+            }
+
+    raise HTTPException(status_code=404, detail=f"no config found for device {device_name}")
 
 
 # ---------------------------------------------------------------------------

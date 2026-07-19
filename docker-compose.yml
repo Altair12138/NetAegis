@@ -1,0 +1,91 @@
+# ===========================================================================
+# NetAegis — Docker Compose 部署配置
+# ===========================================================================
+# 使用方式:
+#   docker compose up -d          # 启动服务
+#   docker compose logs -f        # 查看日志
+#   docker compose down           # 停止服务
+#   docker compose up -d --build  # 重新构建并启动
+# ===========================================================================
+
+services:
+  netaegis-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: netaegis:latest
+    container_name: netaegis-api
+    restart: unless-stopped
+
+    # 端口映射: 宿主机端口:容器端口
+    ports:
+      - "${API_PORT:-8080}:8080"
+
+    # 环境变量 — 从 .env 文件加载
+    env_file:
+      - .env
+    environment:
+      # 容器内路径覆盖（确保与 volume 挂载一致）
+      - DB_URL=sqlite:///./data/inspection.db
+      - RESULT_DIR=/app/results
+      - LOG_DIR=/app/logs
+      - ENVIRONMENT=production
+
+    # 数据持久化卷
+    volumes:
+      # SQLite 数据库（单独目录，便于备份）
+      - netaegis-data:/app/data
+      # 巡检结果
+      - netaegis-results:/app/results
+      # 日志
+      - netaegis-logs:/app/logs
+      # 配置备份
+      - netaegis-backups:/app/backups
+      # 设备清单（如需自定义设备列表，可挂载宿主机文件）
+      - ./inventory:/app/inventory:ro
+
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+    # 资源限制（根据实际负载调整）
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+
+    # 日志配置
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+    # 网络 — 使用 bridge 网络，容器需能 SSH 到网络设备
+    networks:
+      - netaegis-net
+
+# 命名卷声明
+volumes:
+  netaegis-data:
+    name: netaegis-data
+  netaegis-results:
+    name: netaegis-results
+  netaegis-logs:
+    name: netaegis-logs
+  netaegis-backups:
+    name: netaegis-backups
+
+# 网络声明
+networks:
+  netaegis-net:
+    name: netaegis-net
+    driver: bridge

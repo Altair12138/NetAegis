@@ -10,7 +10,7 @@ commands:
   - {key: interface,     cmd: "show interface status",             tags: [interface]}
   - {key: interface_err, cmd: "show interface counters errors",    tags: [interface, health]}
   - {key: route,         cmd: "show ip route",                     tags: [routing, l3]}
-  - {key: arp,           cmd: "show arp",                          tags: [l2, topology]}
+  - {key: arp,           cmd: "show arp detail",                   tags: [l2, topology]}
   - {key: mac,           cmd: "show mac-address-table",            tags: [l2]}
   - {key: lldp,          cmd: "show lldp neighbors",               tags: [topology]}
   - {key: vlan,          cmd: "show vlan brief",                   tags: [l2]}

@@ -447,10 +447,13 @@ logs/
 | POST | `/api/jobs/{id}/pause` | 设备级暂停 |
 | POST | `/api/jobs/{id}/resume` | 恢复 |
 | POST | `/api/jobs/{id}/cancel` | 取消 |
-| GET | `/api/jobs/{id}/devices` | 设备级状态列表 |
+| GET | `/api/jobs/{id}/devices` | 设备级状态列表（支持 `?status_filter=failed`） |
 | GET | `/api/jobs/{id}/devices/{name}/log` | 下载单设备原始日志 |
-| GET | `/api/jobs/{id}/devices/{name}/result` | 二期：结构化 JSON 结果 |
+| GET | `/api/jobs/{id}/devices/{name}/result` | 下载单设备结构化 JSON |
+| GET | `/api/jobs/{id}/results` | 批量下载 job 下所有设备结果（ZIP 打包，支持 `?status_filter=`） |
+| GET | `/api/devices/{name}/config` | 获取设备最新配置（优先从巡检 JSON 提取，否则从备份获取；可选 `?job_id=`） |
 | POST | `/api/inventory/preview` | 上传 CSV / 触发 CMDB 同步预览 |
+| GET | `/api/commands` | 命令目录 + 全量 tag |
 
 > `GET /api/jobs/{id}` 返回的 `devices` 列表中每台设备包含 `save_result` 字段（`{status: "success"|"failed"|"skipped", ...}`），记录设备端保存结果。
 > `GET /api/jobs/{id}/devices/{name}/result` 的 JSON 中也包含 `save_result`。
@@ -495,8 +498,20 @@ logs/
 
 ### 12.1 解析层（parser.py）
 
-- 入口 `parse(vendor, device_type, command, raw) -> Any | None`，在 `JobCreate.enable_parse=True` 时由 inspect 任务调用，结果写入 `commands[].parsed`。
-- 三级降级：① ntc-templates（按 `_PLATFORM_MAP` + `_COMMAND_ALIAS` 查模板）→ ② 内置正则兜底（version / hostname / interface_brief / lldp）→ ③ `{"raw_kept": true}` 不丢数据。
+- 入口 `parse(vendor, device_type, command, raw) -> Any | None`，在 `JobCreate.enable_parse=True`（默认开启）时由 inspect 任务调用，结果写入 `commands[].parsed`。
+- 三级降级：① ntc-templates（按 `_PLATFORM_MAP` + `_COMMAND_ALIAS` 查模板）→ ② 内置正则兜底 → ③ `{"raw_kept": true}` 不丢数据。
+- 内置兜底当前覆盖 6 类命令：
+
+| 命令 key | 解析方式 | 输出结构 |
+|----------|---------|---------|
+| version | 正则匹配版本号（VRP / Comware / RGOS）+ uptime | `{version, uptime}` |
+| sysname / hostname | 正则提取 | `{hostname}` |
+| interface / interface status | 按空格切分表行 | `[{name, admin_or_oper_1, admin_or_oper_2, raw}]` |
+| lldp | 双模式：H3C/华为键值对 + 锐捷/Cisco 表格式 | `[{local_intf, neighbor_device, neighbor_port}]` |
+| arp | 通用表格式解析器 | `[{ip_address, mac_address, ...}]` |
+| 其他 | ntc-templates 或 `raw_kept` | `{"raw_kept": true}` |
+
+- 通用表格式解析器 `_parse_table`：以表头关键词为锚点，利用同一列内词间小空隙（1-2 空格）与列间大空隙（3+ 空格）的对比，自动识别列头段边界，按列位置切分数据行。支持续行合并（锐捷 LLDP 设备名过长换行场景）。
 - 输出 JSON 里 `parsed` 与 `raw` 并存，前端可二选一展示，便于人工核对。
 
 ### 12.2 配置备份 + 差异（backup_store.py）
@@ -571,6 +586,55 @@ curl -OJ localhost:8080/api/jobs/<job_id>/report.xlsx
 curl -X POST localhost:8080/api/jobs \
   -H 'Content-Type: application/json' \
   -d '{"type":"inspect","inventory_path":"inventory/devices.csv","device_save":false}'
+```
+
+#### 12.5.1 批量获取巡检结果
+
+下载某次 job 所有设备的结构化 JSON，打包为 ZIP：
+
+```bash
+# 下载全部设备结果
+curl -OJ localhost:8080/api/jobs/<job_id>/results
+
+# 只下载成功设备的结果
+curl -OJ "localhost:8080/api/jobs/<job_id>/results?status_filter=success"
+```
+
+响应为 `Content-Type: application/zip`，ZIP 内每台设备一个 `.json` 文件。
+
+#### 12.5.2 获取设备最新配置
+
+优先从巡检 JSON 中提取 `key=config` 的 raw 内容；若无则从 backup_store 获取最新备份：
+
+```bash
+# 获取设备最新配置（自动选择来源：巡检结果 或 备份）
+curl localhost:8080/api/devices/SH-MH-401-C11U3-H3CS9825-G0-A04008/config
+
+# 指定从某次 job 的结果中提取
+curl "localhost:8080/api/devices/SH-MH-401-C11U3-H3CS9825-G0-A04008/config?job_id=<job_id>"
+```
+
+响应示例（来自巡检结果）：
+
+```json
+{
+  "device": "SH-MH-401-C11U3-H3CS9825-G0-A04008",
+  "source": "inspection",
+  "config": "#\n!Software Version V500R005 ...\nsysname ..."
+}
+```
+
+响应示例（来自备份）：
+
+```json
+{
+  "device": "SH-MH-401-C11U3-H3CS9825-G0-A04008",
+  "source": "backup",
+  "backup_id": 3,
+  "created_at": "2026-06-27T12:00:00",
+  "sha256": "a1b2c3d4",
+  "config": "#\n!Software Version V500R005 ...\nsysname ..."
+}
 ```
 
 ### 12.6 设备端配置保存（device_save）
